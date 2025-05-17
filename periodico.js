@@ -51,6 +51,6 @@ document.addEventListener("DOMContentLoaded", function() {
   
   // Configurar el botón para continuar
   document.getElementById("continuarBtn").addEventListener("click", function() {
-    window.location.href = "plantilla.html";
+    window.location.href = "menu.html";
   });
 });

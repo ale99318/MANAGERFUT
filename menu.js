@@ -1,74 +1,56 @@
-// Para menu.html
 document.addEventListener("DOMContentLoaded", () => {
   // Obtener datos guardados
   const savedCoachName = localStorage.getItem("coachName");
   const savedClub = localStorage.getItem("selectedClub");
-  
-  // Si no hay nombre de entrenador, redirigir al inicio
+
+  // Redirigir si falta información
   if (!savedCoachName) {
     window.location.href = "main.html";
     return;
   }
-  
-  // Si no hay club seleccionado, redirigir a la selección de equipo
+
   if (!savedClub) {
     window.location.href = "seleccion-equipo.html";
     return;
   }
-  
-  // Mostrar información del entrenador y club en la página
-  const nombreEntrenador = document.getElementById("nombreEntrenador");
-  const nombreClub = document.getElementById("nombreClub");
-  
-  if (nombreEntrenador) {
-    nombreEntrenador.textContent = savedCoachName;
+
+  // Mostrar información del entrenador y club
+  const coachNameDisplay = document.getElementById("coachNameDisplay");
+  const clubDisplay = document.getElementById("clubDisplay");
+
+  if (coachNameDisplay) {
+    coachNameDisplay.textContent = savedCoachName;
   }
-  
-  if (nombreClub) {
-    nombreClub.textContent = savedClub;
+
+  if (clubDisplay) {
+    clubDisplay.textContent = savedClub;
   }
-  
-  // Configurar botones del menú
-  const plantillaBtn = document.getElementById("plantillaBtn");
-  if (plantillaBtn) {
-    plantillaBtn.addEventListener("click", () => {
-      localStorage.removeItem("origen"); // Limpiar origen para la plantilla
-      window.location.href = "plantilla.html";
-    });
-  }
-  
-  const periodicoBtn = document.getElementById("periodicoBtn");
-  if (periodicoBtn) {
-    periodicoBtn.addEventListener("click", () => {
-      window.location.href = "periodico.html";
-    });
-  }
-  
-  const partidoBtn = document.getElementById("partidoBtn");
-  if (partidoBtn) {
-    partidoBtn.addEventListener("click", () => {
-      window.location.href = "partido.html";
-    });
-  }
-  
-  const entrenamientoBtn = document.getElementById("entrenamientoBtn");
-  if (entrenamientoBtn) {
-    entrenamientoBtn.addEventListener("click", () => {
-      window.location.href = "entrenamiento.html";
-    });
-  }
-  
-  const traspasoBtn = document.getElementById("traspasoBtn");
-  if (traspasoBtn) {
-    traspasoBtn.addEventListener("click", () => {
-      window.location.href = "traspasos.html";
-    });
-  }
-  
-  const estadisticasBtn = document.getElementById("estadisticasBtn");
-  if (estadisticasBtn) {
-    estadisticasBtn.addEventListener("click", () => {
-      window.location.href = "estadisticas.html";
+
+  // Navegación de botones
+  const assignNavigation = (id, target) => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener("click", () => {
+        window.location.href = target;
+      });
+    }
+  };
+
+  assignNavigation("plantillaBtn", "plantilla.html");
+  assignNavigation("estrategiaBtn", "estrategia.html");
+  assignNavigation("canterasBtn", "canteras.html");
+  assignNavigation("solicitarJugadorBtn", "fichajes.html");
+  assignNavigation("estadisticasBtn", "estadisticas.html");
+  assignNavigation("traspasoBtn", "traspasos.html");
+  assignNavigation("partidoBtn", "partido.html");
+  assignNavigation("periodicoBtn", "periodico.html");
+
+  // Ejemplo de avance de fecha (ajústalo según lógica real)
+  const avanzarFechaBtn = document.getElementById("avanzarFechaBtn");
+  if (avanzarFechaBtn) {
+    avanzarFechaBtn.addEventListener("click", () => {
+      alert("¡Has avanzado una jornada!");
+      // Aquí podrías actualizar la fecha actual en localStorage y mostrarla.
     });
   }
 });

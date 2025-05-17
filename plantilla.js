@@ -26,4 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
     li.textContent = jugador;
     listaJugadores.appendChild(li);
   });
+
+  // ← Este es el nuevo código para redirigir al siguiente HTML
+const continuarBtn = document.getElementById("continuarBtn");
+continuarBtn.addEventListener("click", () => {
+  window.location.href = "periodico.html"; // esta es la página del periódico
+});
 });

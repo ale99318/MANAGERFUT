@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("nombreEntrenador").textContent = nombreEntrenador;
   document.getElementById("nombreClub").textContent = nombreClub;
   
-  // Array de titulares - evitando usar template literals para verificar si ese es el problema
+  // Array de titulares - usando concatenación tradicional en lugar de template literals
   var titulares = [
     // Críticos
     "¿" + nombreEntrenador + " al mando de " + nombreClub + "? ¡Una apuesta arriesgada!",

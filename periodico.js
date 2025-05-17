@@ -44,4 +44,5 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("continuarBtn").addEventListener("click", () => {
     window.location.href = "plantilla.html";
   });
+  
 });

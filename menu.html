@@ -2,22 +2,34 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Menú Principal</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="menu-container">
-    <h1>Simulador de Entrenador</h1>
-    <div id="infoUsuario">
-      <!-- Aquí se mostrará el equipo guardado si existe -->
+    <div class="header">
+      <h1>⚽ Menú Principal</h1>
+      <p><strong>Entrenador:</strong> <span id="nombreEntrenador">...</span></p>
+      <p><strong>Club:</strong> <span id="nombreClub">...</span></p>
     </div>
-
-    <div class="botones">
-      <button id="btnContinuar" style="display: none;">Continuar</button>
-      <button id="btnNuevoJuego">Nuevo Juego</button>
+    
+    <div class="info-section">
+      <p><strong>Fecha actual:</strong> <span id="fechaActual">Jornada 1</span></p>
+      <p><strong>Posición en la tabla:</strong> <span id="posicionTabla">-</span></p>
+    </div>
+    
+    <div class="menu-buttons">
+      <button id="avanzarFechaBtn" class="menu-btn">Avanzar Fecha</button>
+      <button id="plantillaBtn" class="menu-btn">Plantilla</button>
+      <button id="estrategiaBtn" class="menu-btn">Estrategia</button>
+      <button id="canterasBtn" class="menu-btn">Canteras</button>
+      <button id="solicitarJugadorBtn" class="menu-btn">Solicitar Jugador</button>
+      <button onclick="nuevoJuego()" class="menu-btn">🆕 Nuevo Juego</button>
     </div>
   </div>
 
   <script src="menu.js"></script>
 </body>
 </html>
+

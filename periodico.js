@@ -49,8 +49,24 @@ document.addEventListener("DOMContentLoaded", function() {
   console.log("Titular elegido:", titularElegido);
   document.getElementById("titular").textContent = titularElegido;
   
-  // Configurar el botón para continuar
-  document.getElementById("continuarBtn").addEventListener("click", function() {
-    window.location.href = "menu.html";
+  // Configurar el botón para continuar - con prevención de comportamiento predeterminado
+  var continuarBtn = document.getElementById("continuarBtn");
+  
+  continuarBtn.addEventListener("click", function(event) {
+    // Prevenir cualquier comportamiento predeterminado que pueda estar interfiriendo
+    event.preventDefault();
+    event.stopPropagation();
+    
+    console.log("Botón presionado - redirigiendo a menu.html");
+    
+    // Forzar la redirección con un pequeño retraso para permitir el registro en la consola
+    setTimeout(function() {
+      window.location.href = "menu.html";
+    }, 100);
+    
+    return false; // Para navegadores más antiguos
   });
+
+  // Para asegurarnos que no hay conflictos
+  console.log("Script periodico.js cargado correctamente");
 });

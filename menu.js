@@ -17,30 +17,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   // Mostrar información del entrenador y club en la página
-  const coachNameDisplay = document.getElementById("coachNameDisplay");
-  const clubDisplay = document.getElementById("clubDisplay");
+  const nombreEntrenador = document.getElementById("nombreEntrenador");
+  const nombreClub = document.getElementById("nombreClub");
   
-  if (coachNameDisplay) {
-    coachNameDisplay.textContent = savedCoachName;
+  if (nombreEntrenador) {
+    nombreEntrenador.textContent = savedCoachName;
   }
   
-  if (clubDisplay) {
-    clubDisplay.textContent = savedClub;
+  if (nombreClub) {
+    nombreClub.textContent = savedClub;
   }
   
-  // Configurar los botones del menú
-  
-  // Botón para ir a la plantilla
+  // Configurar botones del menú
   const plantillaBtn = document.getElementById("plantillaBtn");
   if (plantillaBtn) {
     plantillaBtn.addEventListener("click", () => {
-      // Limpiar cualquier valor de origen anterior
-      localStorage.removeItem("origen");
+      localStorage.removeItem("origen"); // Limpiar origen para la plantilla
       window.location.href = "plantilla.html";
     });
   }
   
-  // Otros botones del menú
   const periodicoBtn = document.getElementById("periodicoBtn");
   if (periodicoBtn) {
     periodicoBtn.addEventListener("click", () => {
@@ -55,5 +51,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  // Aquí puedes agregar más botones y funcionalidades del menú
+  const entrenamientoBtn = document.getElementById("entrenamientoBtn");
+  if (entrenamientoBtn) {
+    entrenamientoBtn.addEventListener("click", () => {
+      window.location.href = "entrenamiento.html";
+    });
+  }
+  
+  const traspasoBtn = document.getElementById("traspasoBtn");
+  if (traspasoBtn) {
+    traspasoBtn.addEventListener("click", () => {
+      window.location.href = "traspasos.html";
+    });
+  }
+  
+  const estadisticasBtn = document.getElementById("estadisticasBtn");
+  if (estadisticasBtn) {
+    estadisticasBtn.addEventListener("click", () => {
+      window.location.href = "estadisticas.html";
+    });
+  }
 });

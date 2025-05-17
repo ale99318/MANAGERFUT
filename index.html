@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simulador de Entrenador de Fútbol</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Simulador de Entrenador de Fútbol</h1>
+    
+    <div id="login-section">
+      <p>Ingresa tu nombre de entrenador:</p>
+      <input type="text" id="coachName" placeholder="Ej. Pep Guardiola" />
+      <button id="startBtn">Comenzar</button>
+    </div>
+
+    <div id="welcome-section" style="display: none;">
+      <h2>¡Bienvenido, <span id="coachDisplayName"></span>!</h2>
+      <p><a href="#" id="continueBtn">Continuar a selección de equipo</a></p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

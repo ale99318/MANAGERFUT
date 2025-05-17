@@ -1,55 +1,51 @@
-// Función para seleccionar equipo
-function selectTeam(equipo) {
-  // Guardar la selección en localStorage
-  localStorage.setItem('selectedClub', equipo);
-  
-  // Mostrar confirmación al usuario
-  const confirmation = document.getElementById('confirmation');
-  confirmation.textContent = `Has elegido a ${equipo}.`;
-  confirmation.innerHTML += `<br><br><a href="plantilla.html" class="btn">Continuar a la plantilla</a>`;
-  
-  // También podríamos redirigir automáticamente
-  // setTimeout(() => { window.location.href = 'plantilla.html'; }, 2000);
-}
 
-// Función para verificar si ya existe una selección al cargar cualquier página
-function checkExistingSelection() {
-  const selectedClub = localStorage.getItem('selectedClub');
+// Para seleccion-equipo.html
+document.addEventListener("DOMContentLoaded", () => {
+  // Referencia a elementos del DOM
+  const seleccionSection = document.getElementById("seleccion-section");
+  const confirmacionSection = document.getElementById("confirmacion-section");
   
-  // Si estamos en la página de selección y ya hay un club seleccionado, redirigir al menú/plantilla
-  if (selectedClub && window.location.pathname.includes('seleccion.html')) {
-    console.log(`Club ya seleccionado: ${selectedClub}, redirigiendo...`);
-    window.location.href = 'plantilla.html';
-    return true;
+  // Obtener nombre del entrenador y club guardados
+  const savedCoachName = localStorage.getItem("coachName");
+  const savedClub = localStorage.getItem("selectedClub");
+  
+  // Si no hay nombre de entrenador, redirigir al inicio
+  if (!savedCoachName) {
+    window.location.href = "main.html";
+    return;
   }
   
-  // Si estamos en una página diferente (menú, plantilla, etc.) y no hay club seleccionado, redirigir a la selección
-  if (!selectedClub && !window.location.pathname.includes('seleccion.html')) {
-    console.log('No hay club seleccionado, redirigiendo a selección...');
-    window.location.href = 'seleccion.html';
-    return true;
+  // Si ya hay un club seleccionado, redirigir al menú principal
+  if (savedClub) {
+    window.location.href = "menu.html";
+    return;
   }
   
-  return false;
-}
-
-// Código para mostrar el club seleccionado en la plantilla u otras páginas
-function displaySelectedClub() {
-  const selectedClub = localStorage.getItem('selectedClub');
-  const clubDisplay = document.getElementById('clubDisplay');
+  // Función para seleccionar un equipo
+  window.selectTeam = function(equipo) {
+    // Guardar selección en localStorage
+    localStorage.setItem("selectedClub", equipo);
+    
+    // Establecer el origen para que plantillas.js sepa de dónde viene la llamada
+    localStorage.setItem("origen", "seleccion_equipo");
+    
+    // Mostrar confirmación
+    if (seleccionSection && confirmacionSection) {
+      seleccionSection.style.display = "none";
+      confirmacionSection.style.display = "block";
+      
+      const confirmacionMensaje = document.getElementById("confirmacionMensaje");
+      if (confirmacionMensaje) {
+        confirmacionMensaje.textContent = `Has elegido a ${equipo}.`;
+      }
+    }
+  };
   
-  if (selectedClub && clubDisplay) {
-    clubDisplay.textContent = `Club seleccionado: ${selectedClub}`;
-  }
-}
-
-// Ejecutar estas verificaciones cuando se carga cualquier página
-document.addEventListener('DOMContentLoaded', function() {
-  // Primero verificar si necesitamos redirigir
-  const redirected = checkExistingSelection();
-  
-  // Si no hubo redirección, mostrar la información del club si corresponde
-  if (!redirected) {
-    displaySelectedClub();
+  // Botón para continuar a la plantilla
+  const continuarBtn = document.getElementById("continuarBtn");
+  if (continuarBtn) {
+    continuarBtn.addEventListener("click", () => {
+      window.location.href = "plantilla.html";
+    });
   }
 });

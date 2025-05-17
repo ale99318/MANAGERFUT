@@ -1,79 +1,59 @@
-// Solución completa para el problema de localStorage
-document.addEventListener("DOMContentLoaded", function() {
-  console.log("Menu.js cargado correctamente");
+// Para menu.html
+document.addEventListener("DOMContentLoaded", () => {
+  // Obtener datos guardados
+  const savedCoachName = localStorage.getItem("coachName");
+  const savedClub = localStorage.getItem("selectedClub");
   
-  // Imprimir todos los elementos en localStorage para depuración
-  console.log("--- Contenido completo del localStorage ---");
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    console.log("localStorage[" + key + "] = " + localStorage.getItem(key));
-  }
-  console.log("---------------------------------------");
-  
-  // Intentar obtener valores con nombres alternativos de claves
-  const posiblesClaves = ["coachName", "coach_name", "coach", "entrenador", "nombreEntrenador"];
-  const posiblesClubes = ["selectedClub", "club", "selected_club", "nombreClub", "equipoSeleccionado"];
-  
-  // Función para intentar obtener un valor de múltiples claves posibles
-  function intentarObtenerValor(listaClaves) {
-    for (const clave of listaClaves) {
-      const valor = localStorage.getItem(clave);
-      if (valor) {
-        return { clave, valor };
-      }
-    }
-    return null;
+  // Si no hay nombre de entrenador, redirigir al inicio
+  if (!savedCoachName) {
+    window.location.href = "main.html";
+    return;
   }
   
-  // Buscar valores de entrenador y club
-  const resultadoEntrenador = intentarObtenerValor(posiblesClaves);
-  const resultadoClub = intentarObtenerValor(posiblesClubes);
+  // Si no hay club seleccionado, redirigir a la selección de equipo
+  if (!savedClub) {
+    window.location.href = "seleccion-equipo.html";
+    return;
+  }
   
-  console.log("Resultado de búsqueda de entrenador:", resultadoEntrenador);
-  console.log("Resultado de búsqueda de club:", resultadoClub);
+  // Mostrar información del entrenador y club en la página
+  const coachNameDisplay = document.getElementById("coachNameDisplay");
+  const clubDisplay = document.getElementById("clubDisplay");
   
-  // Asignar valores encontrados o predeterminados
-  let nombreEntrenador = resultadoEntrenador ? resultadoEntrenador.valor : "No disponible";
-  let nombreClub = resultadoClub ? resultadoClub.valor : "No disponible";
+  if (coachNameDisplay) {
+    coachNameDisplay.textContent = savedCoachName;
+  }
   
-  // Actualizar elementos en el DOM
-  document.getElementById("nombreEntrenador").textContent = nombreEntrenador;
-  document.getElementById("nombreClub").textContent = nombreClub;
-  
-  // Valores por defecto para fecha y posición
-  var fechaActual = localStorage.getItem("fechaActual") || "Jornada 1";
-  var posicionTabla = localStorage.getItem("posicionTabla") || "Por determinar";
-  
-  document.getElementById("fechaActual").textContent = fechaActual;
-  document.getElementById("posicionTabla").textContent = posicionTabla;
+  if (clubDisplay) {
+    clubDisplay.textContent = savedClub;
+  }
   
   // Configurar los botones del menú
-  document.getElementById("avanzarFechaBtn").addEventListener("click", function() {
-    console.log("Avanzar fecha clickeado");
-    var fechaNum = parseInt(fechaActual.split(" ")[1]) || 1;
-    fechaNum++;
-    localStorage.setItem("fechaActual", "Jornada " + fechaNum);
-    alert("¡Has avanzado a la Jornada " + fechaNum + "!");
-    location.reload();
-  });
   
-  document.getElementById("plantillaBtn").addEventListener("click", function() {
-    console.log("Plantilla clickeado");
-    window.location.href = "plantilla.html";
-  });
+  // Botón para ir a la plantilla
+  const plantillaBtn = document.getElementById("plantillaBtn");
+  if (plantillaBtn) {
+    plantillaBtn.addEventListener("click", () => {
+      // Limpiar cualquier valor de origen anterior
+      localStorage.removeItem("origen");
+      window.location.href = "plantilla.html";
+    });
+  }
   
-  document.getElementById("estrategiaBtn").addEventListener("click", function() {
-    console.log("Estrategia clickeado");
-    window.location.href = "estrategia.html";
-  });
+  // Otros botones del menú
+  const periodicoBtn = document.getElementById("periodicoBtn");
+  if (periodicoBtn) {
+    periodicoBtn.addEventListener("click", () => {
+      window.location.href = "periodico.html";
+    });
+  }
   
-  document.getElementById("canterasBtn").addEventListener("click", function() {
-    console.log("Canteras clickeado");
-    window.location.href = "canteras.html";
-  });
+  const partidoBtn = document.getElementById("partidoBtn");
+  if (partidoBtn) {
+    partidoBtn.addEventListener("click", () => {
+      window.location.href = "partido.html";
+    });
+  }
   
-  document.getElementById("solicitarJugadorBtn").addEventListener("click", function() {
-    console.log("Solicitar jugador clickeado");
-    window.location.href = "solicitar_jugador.html";
-  });
+  // Aquí puedes agregar más botones y funcionalidades del menú
 });

@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Diario Deportivo</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Periódico Deportivo</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>⚽ Diario Deportivo: ¡Última Hora!</h1>
+    <h1>🗞️ Diario Deportivo</h1>
+    
+    <p><strong>Entrenador:</strong> <span id="nombreEntrenador">...</span></p>
+    <p><strong>Club:</strong> <span id="nombreClub">...</span></p>
 
-    <p><strong>Entrenador:</strong> <span id="nombreEntrenador"></span></p>
-    <p><strong>Club:</strong> <span id="nombreClub"></span></p>
+    <div style="margin-top: 30px;">
+      <h2 id="titular">[Titular aquí]</h2>
+    </div>
 
-    <div id="titular" class="headline"></div>
-
-    <button id="continuarBtn">Continuar al club</button>
+    <button id="continuarBtn" style="margin-top: 40px;">Continuar</button>
   </div>
 
   <script src="periodico.js"></script>

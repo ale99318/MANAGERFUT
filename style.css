@@ -78,21 +78,31 @@ p {
   padding: 12px 24px;
   font-size: 18px;
 }
-/* Sugerencia para añadir estilos al calendario */
+/* Estilos para el calendario */
 .calendario-box {
   background-color: #f0f8ff;
   border-radius: 8px;
   padding: 15px;
   margin: 15px 0;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
 }
 
 .calendario-box h3 {
   margin-top: 0;
   color: #2c3e50;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
 }
 
-#avanzarJornadaBtn {
+.calendario-controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.calendario-controles button {
   background-color: #3498db;
   color: white;
   border: none;
@@ -103,6 +113,75 @@ p {
   transition: background-color 0.3s;
 }
 
-#avanzarJornadaBtn:hover {
+.calendario-controles button:hover {
   background-color: #2980b9;
+}
+
+.saltar-fecha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.saltar-fecha label {
+  font-weight: bold;
+}
+
+.saltar-fecha input[type="date"] {
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.eventos-fecha {
+  background-color: white;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 15px;
+  border-left: 4px solid #3498db;
+}
+
+.eventos-fecha h4 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.eventos-fecha ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.eventos-fecha li {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.eventos-fecha li:last-child {
+  border-bottom: none;
+}
+
+/* Estilos para el menú */
+.menu-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.menu-buttons button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.menu-buttons button:hover {
+  background-color: #27ae60;
 }

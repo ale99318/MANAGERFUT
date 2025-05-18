@@ -53,4 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // Aquí podrías actualizar la fecha actual en localStorage y mostrarla.
     });
   }
+document.addEventListener("DOMContentLoaded", () => {
+  // ...tu código actual...
+
+  // Mostrar calendario
+  renderCalendario("calendarioContainer");
+}); 
 });

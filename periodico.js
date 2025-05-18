@@ -1,72 +1,79 @@
-document.addEventListener("DOMContentLoaded", function() {
-  // Obtener valores del localStorage
-  var nombreEntrenador = localStorage.getItem("coachName") || "Entrenador";
-  var nombreClub = localStorage.getItem("selectedClub") || "Equipo sin nombre";
+document.addEventListener("DOMContentLoaded", () => {
+  // Obtener datos del localStorage
+  const nombreEntrenador = localStorage.getItem("coachName") || "Desconocido";
+  const nombreClub = localStorage.getItem("selectedClub");
   
-  // Imprimir valores para depuración
-  console.log("Entrenador:", nombreEntrenador);
-  console.log("Club:", nombreClub);
-  
-  // Asignar valores a los elementos del DOM
+  // Mostrar información del entrenador
   document.getElementById("nombreEntrenador").textContent = nombreEntrenador;
+  
+  // Verificar si hay un club seleccionado
+  if (!nombreClub) {
+    document.getElementById("nombreClub").textContent = "Ninguno (elige un equipo primero)";
+    // Redirigir a la página de selección de equipo si no hay equipo seleccionado
+    setTimeout(() => {
+      window.location.href = "seleccion-equipo.html";
+    }, 2000);
+    return;
+  }
+  
+  // Mostrar el nombre del club
   document.getElementById("nombreClub").textContent = nombreClub;
   
-  // Array de titulares - usando concatenación tradicional en lugar de template literals
-  var titulares = [
-    // Críticos
-    "¿" + nombreEntrenador + " al mando de " + nombreClub + "? ¡Una apuesta arriesgada!",
-    "Las dudas rodean a " + nombreEntrenador + ": ¿Está preparado para dirigir a " + nombreClub + "?",
-    "Hinchas de " + nombreClub + " no están convencidos con la llegada de " + nombreEntrenador + ".",
-    
-    // Constructivos
-    nombreEntrenador + " promete trabajo y resultados en " + nombreClub + ".",
-    "Nuevo ciclo: " + nombreEntrenador + " inicia su era en " + nombreClub + ".",
-    "Confianza total: la directiva de " + nombreClub + " respalda a " + nombreEntrenador + ".",
-    
-    // Polémicos
-    nombreEntrenador + " fue elegido entre críticas internas en " + nombreClub + ".",
-    "Filtran que " + nombreEntrenador + " no era la primera opción de " + nombreClub + ".",
-    "¿Conflicto en puerta? " + nombreEntrenador + " quiere cambios desde el primer día.",
-    
-    // Destructivos
-    nombreEntrenador + ", ¿el peor fichaje del año para " + nombreClub + "?",
-    "\"No tiene nivel para el club\": prensa destroza a " + nombreEntrenador + ".",
-    nombreClub + " toca fondo al anunciar a " + nombreEntrenador + ".",
-    
-    // Suaves
-    nombreEntrenador + " asume con perfil bajo pero ambición clara.",
-    "Un nuevo comienzo tranquilo para " + nombreEntrenador + " en " + nombreClub + ".",
-    nombreEntrenador + " ya dirige su primera práctica en " + nombreClub + ".",
-    
-    // Amarillistas
-    "¡BOMBA! " + nombreEntrenador + " llega a " + nombreClub + " y sacude el mercado.",
-    "¡Escándalo! " + nombreEntrenador + " exige 10 cambios en " + nombreClub + " apenas llega.",
-    "¡Revolución total! " + nombreEntrenador + " no contará con históricos en " + nombreClub + "."
-  ];
+  // Datos de jugadores ficticios según el equipo
+  const plantillas = {
+    "Alianza Lima": ["Campos", "Zambrano", "Costa", "Barcos", "Reyna"],
+    "Universitario": ["Carvallo", "Riveros", "Polo", "Valera", "Urruti"],
+    "Sporting Cristal": ["Solís", "Chávez", "Ignacio", "Hohberg", "Ávila"]
+  };
   
-  // Escoger un titular al azar
-  var titularElegido = titulares[Math.floor(Math.random() * titulares.length)];
-  console.log("Titular elegido:", titularElegido);
-  document.getElementById("titular").textContent = titularElegido;
+  // Obtener la lista de jugadores para el club seleccionado
+  const jugadores = plantillas[nombreClub] || [];
+  const listaJugadores = document.getElementById("listaJugadores");
   
-  // Configurar el botón para continuar - con prevención de comportamiento predeterminado
-  var continuarBtn = document.getElementById("continuarBtn");
-  
-  continuarBtn.addEventListener("click", function(event) {
-    // Prevenir cualquier comportamiento predeterminado que pueda estar interfiriendo
-    event.preventDefault();
-    event.stopPropagation();
-    
-    console.log("Botón presionado - redirigiendo a menu.html");
-    
-    // Forzar la redirección con un pequeño retraso para permitir el registro en la consola
-    setTimeout(function() {
-      window.location.href = "menu.html";
-    }, 100);
-    
-    return false; // Para navegadores más antiguos
+  // Mostrar los jugadores en la lista
+  jugadores.forEach(jugador => {
+    const li = document.createElement("li");
+    li.textContent = jugador;
+    listaJugadores.appendChild(li);
   });
-
-  // Para asegurarnos que no hay conflictos
-  console.log("Script periodico.js cargado correctamente");
+  
+  // Verificar de dónde viene la llamada para determinar el comportamiento
+  const origen = localStorage.getItem("origen") || "desconocido";
+  const continuarBtn = document.getElementById("continuarBtn");
+  const cambiarEquipoLink = document.getElementById("cambiarEquipoLink");
+  
+  if (origen === "seleccion_equipo") {
+    // Si viene de la selección de equipo, mostrar el botón para continuar al periódico
+    continuarBtn.textContent = "Continuar al periódico";
+    continuarBtn.addEventListener("click", () => {
+      // Limpiar el origen ya que el flujo inicial está completo
+      localStorage.removeItem("origen");
+      window.location.href = "periodico.html";
+    });
+    
+    // Mostrar enlace para cambiar equipo solo en el flujo inicial
+    if (cambiarEquipoLink) {
+      cambiarEquipoLink.style.display = "block";
+    }
+  } else {
+    // Si viene del menú principal, mostrar el botón para volver al menú
+    continuarBtn.textContent = "Volver al menú principal";
+    continuarBtn.addEventListener("click", () => {
+      window.location.href = "menu.html";
+    });
+    
+    // Ocultar enlace para cambiar equipo cuando se accede desde el menú
+    if (cambiarEquipoLink) {
+      cambiarEquipoLink.style.display = "none";
+    }
+  }
+  
+  // Añadir botón para gestionar la plantilla (independientemente del origen)
+  const gestionarBtn = document.getElementById("gestionarBtn");
+  if (gestionarBtn) {
+    gestionarBtn.addEventListener("click", () => {
+      // Aquí puedes agregar lógica para gestionar la plantilla
+      alert("Funcionalidad de gestión de plantilla en desarrollo");
+    });
+  }
 });

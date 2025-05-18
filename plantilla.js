@@ -37,6 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
     listaJugadores.appendChild(li);
   });
   
+  // Primero, ocultar el enlace de cambiar equipo por defecto
+  const cambiarEquipoLink = document.getElementById("cambiarEquipoLink");
+  if (cambiarEquipoLink) {
+    cambiarEquipoLink.style.display = "none";
+  }
+  
   // Verificar de dónde viene la llamada para determinar el comportamiento
   const origen = localStorage.getItem("origen") || "desconocido";
   const continuarBtn = document.getElementById("continuarBtn");
@@ -49,12 +55,22 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.removeItem("origen");
       window.location.href = "periodico.html";
     });
+    
+    // Mostrar enlace para cambiar equipo SOLO en el flujo inicial
+    if (cambiarEquipoLink) {
+      cambiarEquipoLink.style.display = "block";
+    }
   } else {
     // Si viene del menú principal, mostrar el botón para volver al menú
     continuarBtn.textContent = "Volver al menú principal";
     continuarBtn.addEventListener("click", () => {
       window.location.href = "menu.html";
     });
+    
+    // Asegurarse de que el enlace de cambiar equipo esté oculto
+    if (cambiarEquipoLink) {
+      cambiarEquipoLink.style.display = "none";
+    }
   }
   
   // Añadir botón para gestionar la plantilla (independientemente del origen)

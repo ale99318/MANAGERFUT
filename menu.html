@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menú Principal</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Principal - Simulador de Fútbol</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>⚽ Menú Principal</h1>
+    <div class="container menu-container">
+        <header>
+            <h1>Menú Principal</h1>
+            <div class="info-entrenador">
+                <p>Entrenador: <span id="coachNameDisplay">Cargando...</span></p>
+                <p>Club: <span id="clubDisplay">Cargando...</span></p>
+                <p>Fecha: <span id="fechaActual">Jornada 1</span></p>
+            </div>
+        </header>
 
-    <p><strong>Entrenador:</strong> <span id="coachNameDisplay">...</span></p>
-    <p><strong>Club:</strong> <span id="clubDisplay">...</span></p>
-    <p><strong>Fecha actual:</strong> <span id="fechaActual">Jornada 1</span></p>
+        <main class="menu-options">
+            <button id="plantillaBtn" class="menu-btn">Ver Plantilla</button>
+            <button id="clasificacionBtn" class="menu-btn">Clasificación</button>
+            <button id="entrenamientoBtn" class="menu-btn">Entrenamiento</button>
+            <button id="avanzarFechaBtn" class="menu-btn primary">Avanzar Jornada</button>
+            <button id="guardarBtn" class="menu-btn">Guardar Partida</button>
+            <button id="salirBtn" class="menu-btn danger">Salir</button>
+        </main>
 
-    <div style="margin-top: 30px;">
-      <button id="avanzarFechaBtn">📆 Avanzar Fecha</button>
-      <button id="plantillaBtn">👥 Ver Plantilla</button>
-      <button id="estrategiaBtn">📋 Estrategia</button>
-      <button id="canterasBtn">🌱 Canteras</button>
-      <button id="solicitarJugadorBtn">➕ Solicitar Jugador</button>
-      <button id="estadisticasBtn">📊 Estadísticas</button>
-      <button id="periodicoBtn">🗞️ Diario Deportivo</button>
+        <footer>
+            <p>Simulador de Fútbol - Versión 1.0</p>
+        </footer>
     </div>
-  </div>
 
-  <!-- Scripts -->
-  <script src="jornadas.js"></script>
-  <script src="calendario.js"></script>
-  <script src="menu.js"></script>
+    <!-- Cargar el script de menú -->
+    <script src="menu.js"></script>
 </body>
 </html>

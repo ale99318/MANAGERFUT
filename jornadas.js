@@ -11,7 +11,7 @@ const EQUIPOS_LIGA = [
 ];
 
 // Función para inicializar el calendario de liga
-function inicializarCalendarioLiga(temporada = "2025-2026") {
+function inicializarCalendarioLiga(temporada = "2025-2025") {
   // Verificar si ya existe un calendario guardado
   if (localStorage.getItem("calendarioLiga")) {
     return JSON.parse(localStorage.getItem("calendarioLiga"));
@@ -19,8 +19,8 @@ function inicializarCalendarioLiga(temporada = "2025-2026") {
   
   const calendarioLiga = {
     temporada: temporada,
-    fechaInicio: "2025-08-16", // Fecha típica de inicio de temporada
-    fechaFin: "2026-05-24",    // Fecha típica de fin de temporada
+    fechaInicio: "2025-02-16", // Fecha típica de inicio de temporada
+    fechaFin: "2025-12-24",    // Fecha típica de fin de temporada
     jornadas: []
   };
   

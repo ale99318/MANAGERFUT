@@ -1,13 +1,103 @@
-// menu.js - Archivo principal para el menú del juego
+// Modificación para menu.js
+// Mejorar la función para manejar el botón de jugar partido
 
-// Datos del entrenador y club (pueden cargarse desde localStorage)
-let datosEntrenador = {
-  nombre: localStorage.getItem("nombreEntrenador") || "Carlos Ancelotti",
-  club: localStorage.getItem("nombreClub") || "Rayo Vallecano",
-  // Otros datos que puedas necesitar
-};
+// Función mejorada para configurar el botón de Jugar Partido
+function configurarBotonPartido() {
+  const partidoBtn = document.getElementById("partidoBtn");
+  if (!partidoBtn) return;
+  
+  partidoBtn.addEventListener("click", function() {
+    // Verificar si hay un partido para jugar hoy
+    const fechaActual = localStorage.getItem("fechaActual");
+    if (!fechaActual) {
+      return alert("No hay fecha establecida en el sistema");
+    }
+    
+    const infoPartido = verificarPartidoEnFecha(fechaActual);
+    
+    if (infoPartido.hayPartido) {
+      if (!infoPartido.partido.jugado) {
+        // Hay partido pendiente para hoy
+        console.log("Navegando a la pantalla de Partido");
+        
+        // Almacenar información del partido actual para la pantalla de partido
+        localStorage.setItem("partidoActual", JSON.stringify({
+          jornada: infoPartido.jornada,
+          fecha: fechaActual,
+          equipoLocal: infoPartido.partido.local,
+          equipoVisitante: infoPartido.partido.visitante
+        }));
+        
+        window.location.href = "partido.html";
+      } else {
+        // El partido ya se jugó
+        const resultado = infoPartido.partido.resultado;
+        alert(`El partido de hoy (Jornada ${infoPartido.jornada}) ya se ha jugado.\nResultado: ${infoPartido.partido.local} ${resultado} ${infoPartido.partido.visitante}`);
+      }
+    } else {
+      // No hay partido hoy, buscar el próximo
+      const proximoPartido = obtenerProximoPartido();
+      
+      if (proximoPartido) {
+        const fechaPartido = new Date(proximoPartido.fecha);
+        const fechaFormateada = fechaPartido.toLocaleDateString('es-ES', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        
+        // Preguntar si quiere avanzar hasta esa fecha
+        if (confirm(`No hay partido programado para hoy.\nEl próximo partido es el ${fechaFormateada} (Jornada ${proximoPartido.jornada}).\n\n¿Quieres avanzar automáticamente hasta esa fecha?`)) {
+          // Avanzar hasta la fecha del próximo partido
+          localStorage.setItem("fechaActual", proximoPartido.fecha);
+          // Recargar la página para que se actualice todo
+          window.location.reload();
+        }
+      } else {
+        alert("No hay partidos programados en el futuro.");
+      }
+    }
+  });
+  
+  // Verificar si hay partido hoy al cargar la página
+  const fechaActual = localStorage.getItem("fechaActual");
+  if (fechaActual) {
+    const infoPartido = verificarPartidoEnFecha(fechaActual);
+    
+    if (infoPartido.hayPartido && !infoPartido.partido.jugado) {
+      // Destacar visualmente el botón
+      partidoBtn.style.animation = "pulsar 1.5s infinite";
+      
+      // Añadir estilo CSS para la animación si no existe
+      if (!document.getElementById("pulsarAnimacion")) {
+        const estilo = document.createElement("style");
+        estilo.id = "pulsarAnimacion";
+        estilo.innerHTML = `
+          @keyframes pulsar {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 102, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
+          }
+        `;
+        document.head.appendChild(estilo);
+      }
+    }
+  }
+}
 
-// Función para inicializar el menú principal
+// Función actualizada para configurar botones
+function configurarBotones() {
+  // ... [Mantener el resto del código original] ...
+  
+  // Reemplazar la configuración original del botón de Jugar Partido
+  // con la nueva función mejorada
+  configurarBotonPartido();
+  
+  // ... [Mantener el resto del código original] ...
+}
+
+// Modificar la función de inicialización del menú
 function inicializarMenu() {
   console.log("Inicializando menú principal...");
   
@@ -24,133 +114,29 @@ function inicializarMenu() {
     localStorage.setItem("nombreClub", datosEntrenador.club);
   }
   
+  // Asegurarse de que se establezca selectedClub también
+  // (esto es importante para la integración con jornadas.js)
+  if (!localStorage.getItem("selectedClub")) {
+    localStorage.setItem("selectedClub", datosEntrenador.club);
+  }
+  
+  // Inicializar calendario de liga si no existe
+  if (!localStorage.getItem("calendarioLiga")) {
+    inicializarCalendarioLiga();
+  }
+  
   // Inicializar y mostrar el calendario
   renderCalendario("calendarioContainer");
   
   // Añadir event listeners a los botones del menú
   configurarBotones();
-}
-
-// Función para configurar los botones del menú
-function configurarBotones() {
-  // Botón de Plantilla
-  document.getElementById("plantillaBtn").addEventListener("click", function() {
-    console.log("Navegando a la pantalla de Plantilla");
-    window.location.href = "plantilla.html";
-  });
   
-  // Botón de Estrategia
-  document.getElementById("estrategiaBtn").addEventListener("click", function() {
-    console.log("Navegando a la pantalla de Estrategia");
-    window.location.href = "estrategia.html";
-  });
-  
-  // Botón de Canteras
-  document.getElementById("canterasBtn").addEventListener("click", function() {
-    console.log("Navegando a la pantalla de Canteras");
-    window.location.href = "canteras.html";
-  });
-  
-  // Botón de Solicitar Jugador
-  document.getElementById("solicitarJugadorBtn").addEventListener("click", function() {
-    console.log("Navegando a la pantalla de Solicitar Jugador");
-    window.location.href = "solicitar-jugador.html";
-  });
-  
-  // Botón de Estadísticas
-  document.getElementById("estadisticasBtn").addEventListener("click", function() {
-    console.log("Navegando a la pantalla de Estadísticas");
-    window.location.href = "estadisticas.html";
-  });
-  
-  // Botón de Traspasos
-  document.getElementById("traspasoBtn").addEventListener("click", function() {
-    console.log("Navegando a la pantalla de Traspasos");
-    window.location.href = "traspasos.html";
-  });
-  
-  // Botón de Jugar Partido
-  document.getElementById("partidoBtn").addEventListener("click", function() {
-    // Verificar si hay un partido para jugar hoy
-    const fechaActual = localStorage.getItem("fechaActual");
-    if (!fechaActual) {
-      return alert("No hay fecha establecida en el sistema");
-    }
-    
+  // Comprobar si hay partido hoy y mostrar notificación
+  const fechaActual = localStorage.getItem("fechaActual");
+  if (fechaActual) {
     const infoPartido = verificarPartidoEnFecha(fechaActual);
-    
     if (infoPartido.hayPartido && !infoPartido.partido.jugado) {
-      console.log("Navegando a la pantalla de Partido");
-      window.location.href = "partido.html";
-    } else if (infoPartido.hayPartido && infoPartido.partido.jugado) {
-      alert("El partido de hoy ya se ha jugado.");
-    } else {
-      // Buscar el próximo partido
-      const proximoPartido = obtenerProximoPartido();
-      if (proximoPartido) {
-        alert(`No hay partido programado para hoy. El próximo partido es el ${new Date(proximoPartido.fecha).toLocaleDateString('es-ES')}`);
-      } else {
-        alert("No hay partidos programados en el futuro.");
-      }
+      mostrarNotificacionPartido();
     }
-  });
-  
-  // Botón de Periódico
-  document.getElementById("periodicoBtn").addEventListener("click", function() {
-    console.log("Navegando a la pantalla de Periódico");
-    window.location.href = "periodico.html";
-  });
-}
-
-// Función para verificar si los archivos necesarios están cargados
-function verificarDependencias() {
-  // Verificar si las funciones de calendario y jornadas están disponibles
-  if (typeof renderCalendario !== 'function') {
-    console.error("Error: No se ha cargado el archivo calendario.js");
-    mostrarError("No se pudo cargar el calendario. Verifica que los archivos necesarios estén incluidos.");
-    return false;
-  }
-  
-  if (typeof inicializarCalendarioLiga !== 'function') {
-    console.error("Error: No se ha cargado correctamente la función inicializarCalendarioLiga");
-    mostrarError("No se pudo inicializar el calendario de liga. Verifica que los archivos necesarios estén incluidos.");
-    return false;
-  }
-  
-  return true;
-}
-
-// Función para mostrar errores en la pantalla
-function mostrarError(mensaje) {
-  const container = document.querySelector(".container");
-  const errorDiv = document.createElement("div");
-  errorDiv.className = "error-message";
-  errorDiv.textContent = mensaje;
-  errorDiv.style.backgroundColor = "#ffcccc";
-  errorDiv.style.color = "#cc0000";
-  errorDiv.style.padding = "10px";
-  errorDiv.style.borderRadius = "5px";
-  errorDiv.style.margin = "10px 0";
-  
-  container.insertBefore(errorDiv, container.firstChild);
-}
-
-// Inicializar cuando se carga el DOM
-document.addEventListener("DOMContentLoaded", function() {
-  console.log("DOM cargado completamente");
-  
-  // Verificar dependencias antes de inicializar
-  if (verificarDependencias()) {
-    inicializarMenu();
-  }
-});
-
-// También se puede llamar manualmente si ya está cargado el DOM
-if (document.readyState === "complete" || document.readyState === "interactive") {
-  console.log("DOM ya estaba cargado. Inicializando...");
-  
-  // Verificar dependencias antes de inicializar
-  if (verificarDependencias()) {
-    inicializarMenu();
   }
 }

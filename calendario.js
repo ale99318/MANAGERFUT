@@ -14,7 +14,7 @@ function renderCalendario(containerId) {
   const fecha = new Date(fechaActual);
   const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
-  
+   
   // Calcular jornada basada en la fecha (ejemplo: cada 7 días es una jornada)
   const fechaInicio = new Date("2025-01-01"); // Fecha base para calcular jornada
   const diasTranscurridos = Math.floor((fecha - fechaInicio) / (1000 * 60 * 60 * 24));

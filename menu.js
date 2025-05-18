@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Obtener datos guardados
   const savedCoachName = localStorage.getItem("coachName");
-  const savedClub = localStorage.getItem("selectedClub");
+  const savedClub = localStorage.getItem("selectedClub"); 
 
   // Si no hay nombre de entrenador, redirigir al inicio
   if (!savedCoachName) {

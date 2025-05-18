@@ -1,79 +1,129 @@
-// calendario.js
-function renderCalendario(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
+// Modificación para calendario.js
+function mostrarEventosFecha(fecha) {
+  const eventosContainer = document.getElementById("eventosFecha");
+  if (!eventosContainer) return;
   
-  // Obtener la fecha actual del sistema si no hay una guardada
-  let fechaActual = localStorage.getItem("fechaActual");
-  if (!fechaActual) {
-    // Usar la fecha actual como punto de inicio
-    fechaActual = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
-    localStorage.setItem("fechaActual", fechaActual);
-  }
+  // Formatear fecha para búsqueda de eventos
+  const fechaStr = fecha.toISOString().split('T')[0];
   
-  const fecha = new Date(fechaActual);
-  const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
-   
-  // Calcular jornada basada en la fecha (ejemplo: cada 7 días es una jornada)
-  const fechaInicio = new Date("2025-01-01"); // Fecha base para calcular jornada
-  const diasTranscurridos = Math.floor((fecha - fechaInicio) / (1000 * 60 * 60 * 24));
-  const jornadaActual = Math.floor(diasTranscurridos / 7) + 1;
+  // Obtener eventos de localStorage o inicializar si no existen
+  let eventos = JSON.parse(localStorage.getItem("eventosCalendario")) || {};
   
-  container.innerHTML = `
-    <div class="calendario-box">
-      <h3>📅 Fecha actual: ${fechaFormateada}</h3>
-      <p>Jornada: ${jornadaActual}</p>
+  // Comprobar si hay partido en esta fecha usando la función de jornadas.js
+  const infoPartido = verificarPartidoEnFecha(fechaStr);
+  
+  // Si hay un partido programado para esta fecha y no está ya en los eventos, añadirlo
+  if (infoPartido.hayPartido) {
+    if (!eventos[fechaStr]) {
+      eventos[fechaStr] = [];
+    }
+    
+    // Comprobar si ya existe un evento de partido para esta fecha
+    const tienePartido = eventos[fechaStr].some(e => e.tipo === "Partido");
+    
+    if (!tienePartido) {
+      // Crear descripción según si es local o visitante
+      const equipoUsuario = localStorage.getItem("selectedClub") || localStorage.getItem("nombreClub");
+      const esLocal = infoPartido.partido.local === equipoUsuario;
+      const rival = esLocal ? infoPartido.partido.visitante : infoPartido.partido.local;
+      const descripcion = `Jornada ${infoPartido.jornada}: ${esLocal ? 'LOCAL' : 'VISITANTE'} contra ${rival}`;
       
-      <div class="calendario-controles">
-        <button id="avanzarDiaBtn">Avanzar 1 día</button>
-        <button id="avanzarSemanaBtn">Avanzar 1 semana</button>
-        <button id="avanzarMesBtn">Avanzar 1 mes</button>
-        
-        <div class="saltar-fecha">
-          <label for="fechaSelector">Saltar a fecha:</label>
-          <input type="date" id="fechaSelector" min="2025-01-01" max="2050-12-31" value="${fechaActual}">
-          <button id="saltarFechaBtn">Ir</button>
-        </div>
-      </div>
+      // Añadir evento de partido
+      eventos[fechaStr].push({
+        tipo: "Partido",
+        descripcion: descripcion,
+        jugado: infoPartido.partido.jugado
+      });
       
-      <div id="eventosFecha" class="eventos-fecha">
-        <!-- Aquí se mostrarán los eventos de la fecha actual -->
-      </div>
-    </div>
-  `;
-  
-  // Actualizar el elemento fechaActual en la interfaz principal
-  const fechaActualElement = document.getElementById("fechaActual");
-  if (fechaActualElement) {
-    fechaActualElement.textContent = fechaFormateada;
+      // Guardar en localStorage
+      localStorage.setItem("eventosCalendario", JSON.stringify(eventos));
+    } else {
+      // Actualizar estado del partido si es necesario
+      for (let i = 0; i < eventos[fechaStr].length; i++) {
+        if (eventos[fechaStr][i].tipo === "Partido") {
+          eventos[fechaStr][i].jugado = infoPartido.partido.jugado;
+        }
+      }
+      localStorage.setItem("eventosCalendario", JSON.stringify(eventos));
+    }
   }
   
   // Mostrar eventos para esta fecha
-  mostrarEventosFecha(fecha);
-  
-  // Añadir listeners a los botones
-  document.getElementById("avanzarDiaBtn").addEventListener("click", () => {
-    avanzarFecha(1, 'dia');
-  });
-  
-  document.getElementById("avanzarSemanaBtn").addEventListener("click", () => {
-    avanzarFecha(7, 'dia');
-  });
-  
-  document.getElementById("avanzarMesBtn").addEventListener("click", () => {
-    avanzarFecha(1, 'mes');
-  });
-  
-  document.getElementById("saltarFechaBtn").addEventListener("click", () => {
-    const nuevaFecha = document.getElementById("fechaSelector").value;
-    if (nuevaFecha) {
-      localStorage.setItem("fechaActual", nuevaFecha);
-      renderCalendario(containerId);
+  if (eventos[fechaStr] && eventos[fechaStr].length > 0) {
+    let eventosHTML = '<h4>Eventos para hoy:</h4><ul>';
+    eventos[fechaStr].forEach(evento => {
+      // Si es un partido, mostrarlo de forma destacada
+      if (evento.tipo === "Partido") {
+        const estadoPartido = evento.jugado ? 
+          '<span style="color: #888;">[JUGADO]</span>' : 
+          '<span style="color: #ff6600; font-weight: bold;">[PENDIENTE DE JUGAR]</span>';
+        
+        eventosHTML += `<li class="evento-partido">${evento.tipo}: ${evento.descripcion} ${estadoPartido}</li>`;
+      } else {
+        eventosHTML += `<li>${evento.tipo}: ${evento.descripcion}</li>`;
+      }
+    });
+    eventosHTML += '</ul>';
+    eventosContainer.innerHTML = eventosHTML;
+    
+    // Si hay un partido pendiente, mostrar notificación
+    const partidoPendiente = eventos[fechaStr].some(e => e.tipo === "Partido" && !e.jugado);
+    if (partidoPendiente) {
+      mostrarNotificacionPartido();
     }
-  });
+  } else {
+    eventosContainer.innerHTML = '<p>No hay eventos programados para este día.</p>';
+  }
 }
 
+// Función para mostrar notificación de partido pendiente
+function mostrarNotificacionPartido() {
+  // Comprobar si existe un contenedor para la notificación, si no, crearlo
+  let notificacionContainer = document.getElementById("notificacionPartido");
+  if (!notificacionContainer) {
+    notificacionContainer = document.createElement("div");
+    notificacionContainer.id = "notificacionPartido";
+    notificacionContainer.style.backgroundColor = "#ffcc00";
+    notificacionContainer.style.color = "#000";
+    notificacionContainer.style.padding = "10px";
+    notificacionContainer.style.borderRadius = "5px";
+    notificacionContainer.style.margin = "10px 0";
+    notificacionContainer.style.textAlign = "center";
+    notificacionContainer.style.fontWeight = "bold";
+    
+    // Insertar antes del calendario o al principio del contenedor principal
+    const calendarioContainer = document.getElementById("calendarioContainer");
+    if (calendarioContainer) {
+      calendarioContainer.parentNode.insertBefore(notificacionContainer, calendarioContainer);
+    } else {
+      document.querySelector(".container").insertBefore(notificacionContainer, document.querySelector(".container").firstChild);
+    }
+  }
+  
+  // Actualizar mensaje
+  notificacionContainer.innerHTML = '⚽ ¡TIENES UN PARTIDO PENDIENTE PARA HOY! ⚽<br>Pulsa el botón "Jugar Partido" para disputarlo.';
+  
+  // Destacar visualmente el botón de jugar partido
+  const partidoBtn = document.getElementById("partidoBtn");
+  if (partidoBtn) {
+    partidoBtn.style.animation = "pulsar 1.5s infinite";
+    // Añadir estilo CSS para la animación si no existe
+    if (!document.getElementById("pulsarAnimacion")) {
+      const estilo = document.createElement("style");
+      estilo.id = "pulsarAnimacion";
+      estilo.innerHTML = `
+        @keyframes pulsar {
+          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0.7); }
+          50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 102, 0, 0); }
+          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 102, 0, 0); }
+        }
+      `;
+      document.head.appendChild(estilo);
+    }
+  }
+}
+
+// Modificación para avanzarFecha para asegurar que se verifica si hay partido
 function avanzarFecha(cantidad, unidad) {
   const fechaActual = new Date(localStorage.getItem("fechaActual"));
   
@@ -89,51 +139,14 @@ function avanzarFecha(cantidad, unidad) {
     fechaActual.setTime(fechaMaxima.getTime());
   }
   
-  localStorage.setItem("fechaActual", fechaActual.toISOString().split('T')[0]);
+  const nuevaFechaStr = fechaActual.toISOString().split('T')[0];
+  localStorage.setItem("fechaActual", nuevaFechaStr);
+  
+  // Verificar si hay un partido en la nueva fecha
+  const infoPartido = verificarPartidoEnFecha(nuevaFechaStr);
+  if (infoPartido.hayPartido && !infoPartido.partido.jugado) {
+    alert(`¡Tienes un partido programado para hoy (Jornada ${infoPartido.jornada})!\nDebes usar el botón "Jugar Partido" para disputarlo.`);
+  }
+  
   renderCalendario("calendarioContainer");
-}
-
-function mostrarEventosFecha(fecha) {
-  const eventosContainer = document.getElementById("eventosFecha");
-  if (!eventosContainer) return;
-  
-  // Formatear fecha para búsqueda de eventos
-  const fechaStr = fecha.toISOString().split('T')[0];
-  
-  // Obtener eventos de localStorage o inicializar si no existen
-  let eventos = JSON.parse(localStorage.getItem("eventosCalendario")) || {};
-  
-  // Mostrar eventos para esta fecha
-  if (eventos[fechaStr] && eventos[fechaStr].length > 0) {
-    let eventosHTML = '<h4>Eventos para hoy:</h4><ul>';
-    eventos[fechaStr].forEach(evento => {
-      eventosHTML += `<li>${evento.tipo}: ${evento.descripcion}</li>`;
-    });
-    eventosHTML += '</ul>';
-    eventosContainer.innerHTML = eventosHTML;
-  } else {
-    eventosContainer.innerHTML = '<p>No hay eventos programados para este día.</p>';
-  }
-  
-  // Comprobar si hay partido en esta fecha
-  const diaDelMes = fecha.getDate();
-  if (diaDelMes % 7 === 0) { // Ejemplo: partidos cada 7 días
-    if (!eventos[fechaStr]) {
-      eventos[fechaStr] = [];
-    }
-    
-    // Solo añadir el partido si no existe ya uno para esta fecha
-    const tienePartido = eventos[fechaStr].some(e => e.tipo === "Partido");
-    
-    if (!tienePartido) {
-      eventos[fechaStr].push({
-        tipo: "Partido",
-        descripcion: "Partido de Liga contra equipo rival"
-      });
-      localStorage.setItem("eventosCalendario", JSON.stringify(eventos));
-      
-      // Actualizar la visualización
-      mostrarEventosFecha(fecha);
-    }
-  }
 }

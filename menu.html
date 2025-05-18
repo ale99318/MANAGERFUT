@@ -1,34 +1,31 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Menú Principal</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
     <h1>⚽ Menú Principal</h1>
-    
+
     <p><strong>Entrenador:</strong> <span id="coachNameDisplay">...</span></p>
     <p><strong>Club:</strong> <span id="clubDisplay">...</span></p>
-    
-    <div id="calendarioContainer"></div>
-    <p><strong>Fecha actual:</strong> <span id="fechaActual">...</span></p>
-    <p><strong>Posición en la tabla:</strong> <span id="posicionTabla">-</span></p>
-    
-    <div class="menu-buttons">
-      <button id="plantillaBtn">Plantilla</button>
-      <button id="estrategiaBtn">Estrategia</button>
-      <button id="canterasBtn">Canteras</button>
-      <button id="solicitarJugadorBtn">Solicitar Jugador</button>
-      <button id="estadisticasBtn">Estadísticas</button>
-      <button id="traspasoBtn">Traspasos</button>
-      <button id="partidoBtn">Jugar Partido</button>
-      <button id="periodicoBtn">Periódico</button>
+    <p><strong>Fecha actual:</strong> <span id="fechaActual">Jornada 1</span></p>
+
+    <div style="margin-top: 30px;">
+      <button id="avanzarFechaBtn">📆 Avanzar Fecha</button>
+      <button id="plantillaBtn">👥 Ver Plantilla</button>
+      <button id="estrategiaBtn">📋 Estrategia</button>
+      <button id="canterasBtn">🌱 Canteras</button>
+      <button id="solicitarJugadorBtn">➕ Solicitar Jugador</button>
+      <button id="estadisticasBtn">📊 Estadísticas</button>
+      <button id="periodicoBtn">🗞️ Diario Deportivo</button>
     </div>
   </div>
-  
+
+  <!-- Scripts -->
   <script src="jornadas.js"></script>
   <script src="calendario.js"></script>
   <script src="menu.js"></script>

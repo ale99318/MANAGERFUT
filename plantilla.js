@@ -19,23 +19,97 @@ document.addEventListener("DOMContentLoaded", () => {
   // Mostrar el nombre del club
   document.getElementById("nombreClub").textContent = nombreClub;
   
-  // Datos de jugadores ficticios según el equipo
+  // Datos de jugadores con estadísticas completas
   const plantillas = {
-   "Alianza Lima": ["Guillermo Viscarra", "Ángelo Campos", "Ángel De La Cruz", "Fabrisio Mesías", "Carlos Zambrano", "Miguel Trauco", "Renzo Garcés", "Guillermo Enrique", "Ricardo Lagos", "Erick Noriega", "Marco Huamán", "Carlos Gómez", "Jhoao Velásquez", "Nicolás Amasifuen", "Brian Arias", "Rait Alarcón", "Jhosenffer Yllescas", "Mateo Arakaki", "Jean Pierre Archimbaud", "Jesús Castillo", "Fernando Gaibor", "Pablo Lavandeira", "Pablo Ceppelini", "Gonzalo Aguirre", "Juan Delgado", "Mart Piero Cari", "Alan Cantero", "Bassco Soyer", "Said Peralta", "Luis Javier Navea", "Hernán Barcos", "Paolo Guerrero", "Matías Succar", "Kevin Quevedo", "Eryc Castillo", "Víctor Guzmán", "Jhamir D'Arrigo"],
-      "Universitario": ["Sebastián Britos", "Aamet Calderón", "Jhefferson Rodríguez", "Miguel Vargas", "Williams Riveros", "Matías Di Benedetto", "Gustavo Dulanto", "Aldo Corzo", "Paolo Reyna", "José Carabalí", "César Inga", "Esteban Cruz", "Rafael Guzmán", "Julinho Astudillo", "Martín Pérez Guedes", "Horacio Calcaterra", "Jairo Concha", "Jairo Vélez", "Rodrigo Dioses", "Sebastián Flores", "Andy Polo", "Alexander Succar", "Nicolás Rengifo"],
-  "Sporting Cristal": ["Diego Enríquez", "Renato Solís", "Alejandro Duarte", "César Bautista", "Gianfranco Chávez", "Rafael Lutiger", "Franco Romero", "Nicolás Pasquini", "Alejandro Pósito", "Leonardo Díaz", "Gabriel Alfaro", "Jesús Pretell", "Leandro Sosa", "Yoshimar Yotún", "Martín Távara", "Ian Wisdom", "Adrián Ascues", "Christofer Gonzales", "Gustavo Cazonatti", "Santiago González", "Martín Cauteruccio", "Alejandro Hohberg", "Irven Ávila", "Diego Otoya", "Maxloren Castro", "Fernando Pacheco", "Jostin Alarcón"]
-
-    
+    "Alianza Lima": [
+      {
+        nombre: "Paolo Guerrero",
+        edad: 41,
+        posicion: "Delantero",
+        estadisticas: {
+          velocidad: 78,
+          sprint: 75,
+          disparo: 86,
+          pase: 79,
+          defensa: 45,
+          fisico: 82
+        },
+        valorGeneral: 74, // Suma de estadísticas dividida para obtener promedio
+        precioTransferencia: "800.000€",
+        sueldo: "30.000€ mensuales",
+        potencialMejora: "Bajo (debido a su edad)"
+      }
+    ],
+    "Universitario": [
+      {
+        nombre: "Andy Polo",
+        edad: 29,
+        posicion: "Extremo Derecho",
+        estadisticas: {
+          velocidad: 88,
+          sprint: 89,
+          disparo: 76,
+          pase: 78,
+          defensa: 62,
+          fisico: 74
+        },
+        valorGeneral: 78,
+        precioTransferencia: "1.200.000€",
+        sueldo: "25.000€ mensuales",
+        potencialMejora: "Moderado"
+      }
+    ],
+    "Sporting Cristal": [
+      {
+        nombre: "Yoshimar Yotún",
+        edad: 34,
+        posicion: "Centrocampista",
+        estadisticas: {
+          velocidad: 75,
+          sprint: 73,
+          disparo: 76,
+          pase: 85,
+          defensa: 79,
+          fisico: 77
+        },
+        valorGeneral: 77,
+        precioTransferencia: "950.000€",
+        sueldo: "28.000€ mensuales",
+        potencialMejora: "Bajo"
+      }
+    ]
   };
   
   // Obtener la lista de jugadores para el club seleccionado
   const jugadores = plantillas[nombreClub] || [];
   const listaJugadores = document.getElementById("listaJugadores");
   
-  // Mostrar los jugadores en la lista
+  // Mostrar los jugadores en la lista con sus estadísticas
   jugadores.forEach(jugador => {
     const li = document.createElement("li");
-    li.textContent = jugador;
+    li.className = "jugador-item";
+    
+    // Crear estructura HTML para mostrar jugadores con estadísticas
+    li.innerHTML = `
+      <h3>${jugador.nombre}</h3>
+      <p><strong>Posición:</strong> ${jugador.posicion} | <strong>Edad:</strong> ${jugador.edad} años</p>
+      <div class="estadisticas">
+        <p><strong>Estadísticas:</strong></p>
+        <ul class="stats-list">
+          <li>Velocidad: ${jugador.estadisticas.velocidad}</li>
+          <li>Sprint: ${jugador.estadisticas.sprint}</li>
+          <li>Disparo: ${jugador.estadisticas.disparo}</li>
+          <li>Pase: ${jugador.estadisticas.pase}</li>
+          <li>Defensa: ${jugador.estadisticas.defensa}</li>
+          <li>Físico: ${jugador.estadisticas.fisico}</li>
+        </ul>
+      </div>
+      <p><strong>Valor general:</strong> ${jugador.valorGeneral}</p>
+      <p><strong>Precio de transferencia:</strong> ${jugador.precioTransferencia}</p>
+      <p><strong>Sueldo:</strong> ${jugador.sueldo}</p>
+      <p><strong>Potencial de mejora:</strong> ${jugador.potencialMejora}</p>
+    `;
+    
     listaJugadores.appendChild(li);
   });
   

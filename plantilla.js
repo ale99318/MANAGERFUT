@@ -1,5 +1,3 @@
-// script.js - Lógica JavaScript para la plantilla del equipo
-
 document.addEventListener("DOMContentLoaded", () => {
   // Obtener datos del localStorage
   const nombreEntrenador = localStorage.getItem("coachName") || "Desconocido";

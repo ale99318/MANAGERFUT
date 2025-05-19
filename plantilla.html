@@ -1,39 +1,31 @@
-<!-- index.html - Estructura HTML para la plantilla del equipo -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plantilla del Equipo</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Gestión de Plantilla</title>
+  <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
   <div class="container">
-    <h1>Plantilla del Equipo</h1>
-    
-    <div class="info-club">
-      <div>
-        <h3>Entrenador:</h3>
-        <p id="nombreEntrenador">Cargando...</p>
-      </div>
-      <div>
-        <h3>Club:</h3>
-        <p id="nombreClub">Cargando...</p>
-      </div>
+    <div class="info-header">
+      <h1>Gestión de Plantilla</h1>
+      <p><strong>Entrenador:</strong> <span id="nombreEntrenador">Cargando...</span></p>
+      <p><strong>Club:</strong> <span id="nombreClub">Cargando...</span></p>
     </div>
     
-    <h2>Jugadores</h2>
-    <ul id="listaJugadores" class="lista-jugadores">
-      <!-- Los jugadores se cargarán dinámicamente aquí desde JavaScript -->
-    </ul>
-    
-    <div class="acciones-principales">
+    <div class="botones-principales">
+      <button id="gestionarBtn">Gestionar Plantilla</button>
       <button id="continuarBtn">Continuar</button>
-      <a href="seleccion-equipo.html" id="cambiarEquipoLink">Cambiar de equipo</a>
-      <button id="gestionarBtn">Gestionar plantilla</button>
+      <a href="seleccion-equipo.html" id="cambiarEquipoLink" class="link-accion">Cambiar de equipo</a>
     </div>
+
+    <h2>Jugadores Disponibles</h2>
+    <ul id="listaJugadores" class="lista-jugadores">
+      <!-- Los jugadores se cargarán dinámicamente con JavaScript -->
+    </ul>
   </div>
 
-  <script src="script.js"></script>
+  <script src="plantilla.js"></script>
 </body>
 </html>

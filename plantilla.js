@@ -21,9 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Datos de jugadores ficticios según el equipo
   const plantillas = {
-    "Alianza Lima": ["Campos", "Zambrano", "Costa", "Barcos", "Reyna"],
-    "Universitario": ["Carvallo", "Riveros", "Polo", "Valera", "Urruti"],
-    "Sporting Cristal": ["Solís", "Chávez", "Ignacio", "Hohberg", "Ávila"]
+   "Alianza Lima": ["Guillermo Viscarra", "Ángelo Campos", "Ángel De La Cruz", "Fabrisio Mesías", "Carlos Zambrano", "Miguel Trauco", "Renzo Garcés", "Guillermo Enrique", "Ricardo Lagos", "Erick Noriega", "Marco Huamán", "Carlos Gómez", "Jhoao Velásquez", "Nicolás Amasifuen", "Brian Arias", "Rait Alarcón", "Jhosenffer Yllescas", "Mateo Arakaki", "Jean Pierre Archimbaud", "Jesús Castillo", "Fernando Gaibor", "Pablo Lavandeira", "Pablo Ceppelini", "Gonzalo Aguirre", "Juan Delgado", "Mart Piero Cari", "Alan Cantero", "Bassco Soyer", "Said Peralta", "Luis Javier Navea", "Hernán Barcos", "Paolo Guerrero", "Matías Succar", "Kevin Quevedo", "Eryc Castillo", "Víctor Guzmán", "Jhamir D'Arrigo"],
+      "Universitario": ["Sebastián Britos", "Aamet Calderón", "Jhefferson Rodríguez", "Miguel Vargas", "Williams Riveros", "Matías Di Benedetto", "Gustavo Dulanto", "Aldo Corzo", "Paolo Reyna", "José Carabalí", "César Inga", "Esteban Cruz", "Rafael Guzmán", "Julinho Astudillo", "Martín Pérez Guedes", "Horacio Calcaterra", "Jairo Concha", "Jairo Vélez", "Rodrigo Dioses", "Sebastián Flores", "Andy Polo", "Alexander Succar", "Nicolás Rengifo"],
+  "Sporting Cristal": ["Diego Enríquez", "Renato Solís", "Alejandro Duarte", "César Bautista", "Gianfranco Chávez", "Rafael Lutiger", "Franco Romero", "Nicolás Pasquini", "Alejandro Pósito", "Leonardo Díaz", "Gabriel Alfaro", "Jesús Pretell", "Leandro Sosa", "Yoshimar Yotún", "Martín Távara", "Ian Wisdom", "Adrián Ascues", "Christofer Gonzales", "Gustavo Cazonatti", "Santiago González", "Martín Cauteruccio", "Alejandro Hohberg", "Irven Ávila", "Diego Otoya", "Maxloren Castro", "Fernando Pacheco", "Jostin Alarcón"]
+
+    
   };
   
   // Obtener la lista de jugadores para el club seleccionado

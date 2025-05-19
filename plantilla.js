@@ -1,3 +1,4 @@
+// script.js - Lógica JavaScript para la plantilla del equipo
 
 document.addEventListener("DOMContentLoaded", () => {
   // Obtener datos del localStorage
@@ -19,60 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Mostrar el nombre del club
   document.getElementById("nombreClub").textContent = nombreClub;
-  
-  // Agregar algo de CSS para los botones de acción
-  const style = document.createElement('style');
-  style.textContent = `
-    .jugador-item {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-      background-color: #f9f9f9;
-    }
-    
-    .stats-list {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    
-    .botones-accion {
-      display: none;
-      gap: 10px;
-      margin-top: 15px;
-    }
-    
-    .botones-accion button {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-    
-    .btn-entrenar {
-      background-color: #4CAF50;
-      color: white;
-    }
-    
-    .btn-prestar {
-      background-color: #2196F3;
-      color: white;
-    }
-    
-    .btn-vender {
-      background-color: #FF9800;
-      color: white;
-    }
-    
-    .btn-despedir {
-      background-color: #f44336;
-      color: white;
-    }
-  `;
-  document.head.appendChild(style);
   
   // Datos de jugadores con estadísticas completas
   const plantillas = {

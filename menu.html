@@ -1,37 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Principal - Simulador de Fútbol</title>
-    <link rel="stylesheet" href="styles.css"> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Principal</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container menu-container">
-        <header>
-            <h1>Menú Principal</h1>
-            <div class="info-entrenador">
-                <p>Entrenador: <span id="coachNameDisplay">Cargando...</span></p>
-                <p>Club: <span id="clubDisplay">Cargando...</span></p>
-                <p>Fecha: <span id="fechaActual">Jornada 1</span></p>
-            </div>
-        </header>
+  <div class="menu-container">
 
-        <main class="menu-options">
-            <button id="plantillaBtn" class="menu-btn">Ver Plantilla</button>
-            <button id="clasificacionBtn" class="menu-btn">Clasificación</button>
-            <button id="entrenamientoBtn" class="menu-btn">Entrenamiento</button>
-            <button id="avanzarFechaBtn" class="menu-btn primary">Avanzar Jornada</button>
-            <button id="guardarBtn" class="menu-btn">Guardar Partida</button>
-            <button id="salirBtn" class="menu-btn danger">Salir</button>
-        </main>
+    <!-- Zona superior: Información del DT -->
+    <header class="menu-header">
+      <div class="dt-info">
+        <p><strong>Entrenador:</strong> <span id="coachNameDisplay">...</span></p>
+        <p><strong>Club:</strong> <span id="clubDisplay">...</span></p>
+        <p><strong>Fecha actual:</strong> <span id="fechaDisplay">Jornada 1</span></p>
+        <p><strong>Posición:</strong> <span id="posicionDisplay">-</span></p>
+      </div>
+    </header>
 
-        <footer>
-            <p>Simulador de Fútbol - Versión 1.0</p>
-        </footer>
+    <div class="menu-content">
+
+      <!-- Barra lateral izquierda -->
+      <nav class="menu-sidebar">
+        <button id="plantillaBtn">Plantilla</button>
+        <button id="estrategiaBtn">Estrategia</button>
+        <button id="canterasBtn">Cantera</button>
+        <button id="estadisticasBtn">Estadísticas</button>
+      </nav>
+
+      <!-- Centro: botón principal de acción -->
+      <main class="menu-main">
+        <div class="jugar-card">
+          <h2>Próximo Partido</h2>
+          <p id="proximoPartido">Universitario vs Alianza Lima</p>
+          <button id="jugarPartidoBtn">JUGAR PARTIDO</button>
+        </div>
+      </main>
+
+      <!-- Cuadro de redes sociales -->
+      <aside class="menu-social">
+        <h3>Lo que se dice del DT...</h3>
+        <ul id="comentariosSociales">
+          <!-- Aquí se mostrarán los comentarios -->
+          <li>"¿Será este el año del campeonato?"</li>
+          <li>"El nuevo fichaje está dando resultados."</li>
+          <li>"La hinchada está ilusionada."</li>
+        </ul>
+      </aside>
+
     </div>
 
-    <!-- Cargar el script de menú -->
-    <script src="menu.js"></script>
+  </div>
+
+  <script src="menu.js"></script>
 </body>
 </html>

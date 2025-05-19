@@ -1,0 +1,130 @@
+/* Estilos para la página de plantilla */
+
+/* Estilos para los elementos de jugador */
+.jugador-item {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+}
+
+/* Lista de estadísticas en grid para mejor visualización */
+.stats-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* Contenedor de botones de acción */
+.botones-accion {
+  display: none;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Estilos generales para botones de acción */
+.botones-accion button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+/* Colores específicos para cada tipo de botón */
+.btn-entrenar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-entrenar:hover {
+  background-color: #45a049;
+}
+
+.btn-prestar {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-prestar:hover {
+  background-color: #0b7dda;
+}
+
+.btn-vender {
+  background-color: #FF9800;
+  color: white;
+}
+
+.btn-vender:hover {
+  background-color: #e68a00;
+}
+
+.btn-despedir {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-despedir:hover {
+  background-color: #da190b;
+}
+
+/* Encabezado de información del entrenador y club */
+.info-header {
+  background-color: #f2f2f2;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Botones principales de acción */
+.botones-principales {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.botones-principales button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.botones-principales button:hover {
+  background-color: #45a049;
+}
+
+/* Estilos para enlaces */
+a.link-accion {
+  color: #2196F3;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 15px;
+}
+
+a.link-accion:hover {
+  text-decoration: underline;
+  color: #0b7dda;
+}
+
+/* Estilos responsive */
+@media (max-width: 768px) {
+  .stats-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .botones-accion {
+    flex-direction: column;
+  }
+  
+  .botones-principales {
+    flex-direction: column;
+  }
+}

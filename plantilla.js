@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   // Obtener datos del localStorage
   const nombreEntrenador = localStorage.getItem("coachName") || "Desconocido";
@@ -19,6 +20,60 @@ document.addEventListener("DOMContentLoaded", () => {
   // Mostrar el nombre del club
   document.getElementById("nombreClub").textContent = nombreClub;
   
+  // Agregar algo de CSS para los botones de acción
+  const style = document.createElement('style');
+  style.textContent = `
+    .jugador-item {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #f9f9f9;
+    }
+    
+    .stats-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    
+    .botones-accion {
+      display: none;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .botones-accion button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    
+    .btn-entrenar {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .btn-prestar {
+      background-color: #2196F3;
+      color: white;
+    }
+    
+    .btn-vender {
+      background-color: #FF9800;
+      color: white;
+    }
+    
+    .btn-despedir {
+      background-color: #f44336;
+      color: white;
+    }
+  `;
+  document.head.appendChild(style);
+  
   // Datos de jugadores con estadísticas completas
   const plantillas = {
     "Alianza Lima": [
@@ -26,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nombre: "Paolo Guerrero",
         edad: 41,
         posicion: "Delantero",
+        caracter: "Líder nato",
         estadisticas: {
           velocidad: 78,
           sprint: 75,
@@ -45,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nombre: "Andy Polo",
         edad: 29,
         posicion: "Extremo Derecho",
+        caracter: "Trabajador",
         estadisticas: {
           velocidad: 88,
           sprint: 89,
@@ -64,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nombre: "Yoshimar Yotún",
         edad: 34,
         posicion: "Centrocampista",
+        caracter: "Profesional",
         estadisticas: {
           velocidad: 75,
           sprint: 73,
@@ -93,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     li.innerHTML = `
       <h3>${jugador.nombre}</h3>
       <p><strong>Posición:</strong> ${jugador.posicion} | <strong>Edad:</strong> ${jugador.edad} años</p>
+      <p><strong>Carácter:</strong> ${jugador.caracter}</p>
       <div class="estadisticas">
         <p><strong>Estadísticas:</strong></p>
         <ul class="stats-list">
@@ -110,7 +169,41 @@ document.addEventListener("DOMContentLoaded", () => {
       <p><strong>Potencial de mejora:</strong> ${jugador.potencialMejora}</p>
     `;
     
+    // Añadir botones de acción al jugador
+    const botonesAccion = document.createElement("div");
+    botonesAccion.className = "botones-accion";
+    botonesAccion.style.display = "none"; // Inicialmente ocultos
+    botonesAccion.innerHTML = `
+      <button class="btn-entrenar">Entrenar</button>
+      <button class="btn-prestar">Prestar</button>
+      <button class="btn-vender">Vender</button>
+      <button class="btn-despedir">Despedir</button>
+    `;
+    
+    li.appendChild(botonesAccion);
     listaJugadores.appendChild(li);
+    
+    // Configurar eventos para los botones
+    const btnEntrenar = botonesAccion.querySelector(".btn-entrenar");
+    const btnPrestar = botonesAccion.querySelector(".btn-prestar");
+    const btnVender = botonesAccion.querySelector(".btn-vender");
+    const btnDespedir = botonesAccion.querySelector(".btn-despedir");
+    
+    btnEntrenar.addEventListener("click", () => {
+      alert(`Entrenando a ${jugador.nombre}. Sus estadísticas mejorarán en el próximo entrenamiento.`);
+    });
+    
+    btnPrestar.addEventListener("click", () => {
+      alert(`${jugador.nombre} ha sido prestado a otro club por una temporada.`);
+    });
+    
+    btnVender.addEventListener("click", () => {
+      alert(`Has vendido a ${jugador.nombre} por ${jugador.precioTransferencia}.`);
+    });
+    
+    btnDespedir.addEventListener("click", () => {
+      alert(`Has despedido a ${jugador.nombre}. Tendrás que pagar una indemnización.`);
+    });
   });
   
   // Primero, ocultar el enlace de cambiar equipo por defecto
@@ -147,6 +240,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cambiarEquipoLink) {
       cambiarEquipoLink.style.display = "none";
     }
+    
+    // Mostrar los botones de acción para cada jugador cuando viene del menú principal
+    document.querySelectorAll(".botones-accion").forEach(botonera => {
+      botonera.style.display = "flex";
+    });
   }
   
   // Añadir botón para gestionar la plantilla (independientemente del origen)

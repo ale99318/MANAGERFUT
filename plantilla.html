@@ -1,27 +1,39 @@
+<!-- index.html - Estructura HTML para la plantilla del equipo -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plantilla del Equipo</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <h1>Plantilla del Equipo</h1>
-    <p><strong>Entrenador:</strong> <span id="nombreEntrenador"></span></p>
-    <p><strong>Club:</strong> <span id="nombreClub"></span></p>
-    <h2>Jugadores:</h2>
-    <ul id="listaJugadores"></ul>
-    <div style="margin-top: 20px;" id="cambiarEquipoLink">
-      <a href="seleccion-equipo.html">← Cambiar equipo</a>
+    
+    <div class="info-club">
+      <div>
+        <h3>Entrenador:</h3>
+        <p id="nombreEntrenador">Cargando...</p>
+      </div>
+      <div>
+        <h3>Club:</h3>
+        <p id="nombreClub">Cargando...</p>
+      </div>
     </div>
-    <!-- Nuevo botón para continuar -->
-    <div style="margin-top: 20px;">
+    
+    <h2>Jugadores</h2>
+    <ul id="listaJugadores" class="lista-jugadores">
+      <!-- Los jugadores se cargarán dinámicamente aquí desde JavaScript -->
+    </ul>
+    
+    <div class="acciones-principales">
       <button id="continuarBtn">Continuar</button>
+      <a href="seleccion-equipo.html" id="cambiarEquipoLink">Cambiar de equipo</a>
+      <button id="gestionarBtn">Gestionar plantilla</button>
     </div>
   </div>
-  <script src="stats-generador.js"></script>
-  <script src="plantilla.js"></script>
+
+  <script src="script.js"></script>
 </body>
 </html>

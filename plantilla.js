@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "Alianza Lima": [
       {
         nombre: "Paolo Guerrero",
-        edad: 41,
+        edad: 25,
         posicion: "Delantero",
         caracter: "Líder nato",
         estadisticas: {
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         valorGeneral: 74, // Suma de estadísticas dividida para obtener promedio
         precioTransferencia: "800.000€",
         sueldo: "30.000€ mensuales",
-        potencialMejora: "Bajo (debido a su edad)"
+        potencialMejora: "Alto (debido a su edad)"
       }
     ],
     "Universitario": [

@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const continuarBtn = document.getElementById("continuarBtn");
   if (continuarBtn) {
     continuarBtn.addEventListener("click", () => {
-      window.location.href = "plantilla.html";
+      window.location.href = "menu.html";
     });
   }
 });

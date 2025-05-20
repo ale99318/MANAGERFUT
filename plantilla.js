@@ -143,7 +143,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     
     btnVender.addEventListener("click", () => {
-      alert(`Has vendido a ${jugador.nombre} por ${jugador.precioTransferencia}.`);
+      // En lugar de solo mostrar un alert, guardamos la información del jugador
+      // en localStorage y redirigimos a la página de ventas
+      localStorage.setItem("jugadorEnVenta", JSON.stringify({
+        nombre: jugador.nombre,
+        club: nombreClub,
+        edad: jugador.edad,
+        posicion: jugador.posicion,
+        valorGeneral: jugador.valorGeneral,
+        precioTransferencia: jugador.precioTransferencia,
+        estadisticas: jugador.estadisticas
+      }));
+      
+      // Redirigir a la página de ventas
+      window.location.href = "ventas.html";
     });
     
     btnDespedir.addEventListener("click", () => {

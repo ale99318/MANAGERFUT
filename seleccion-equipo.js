@@ -1,4 +1,4 @@
- 
+  
 // Para seleccion-equipo.html
 document.addEventListener("DOMContentLoaded", () => {
   // Referencia a elementos del DOM

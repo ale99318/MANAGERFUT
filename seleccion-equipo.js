@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Si no hay nombre de entrenador, redirigir al inicio
   if (!savedCoachName) {
-    window.location.href = "main.html";
+    window.location.href = "index.html";
     return;
   }
   

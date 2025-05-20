@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", () => {  
   // Obtener datos del localStorage
   const nombreEntrenador = localStorage.getItem("coachName") || "Desconocido";
   const nombreClub = localStorage.getItem("selectedClub");

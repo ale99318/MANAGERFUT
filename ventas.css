@@ -1,0 +1,216 @@
+/* Estilos generales */
+
+{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+background-color: #f4f7fc;
+color: #333;
+}
+.container {
+max-width: 900px;
+margin: 0 auto;
+padding: 20px;
+}
+header {
+text-align: center;
+margin-bottom: 30px;
+background-color: #1e3a8a;
+color: white;
+padding: 15px;
+border-radius: 8px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+h1 {
+font-size: 28px;
+}
+main {
+background-color: white;
+border-radius: 8px;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+padding: 25px;
+}
+/* Estilos de información del jugador */
+.jugador-info {
+margin-bottom: 25px;
+border-bottom: 1px solid #eaeaea;
+padding-bottom: 20px;
+}
+.jugador-info h2 {
+color: #1e3a8a;
+font-size: 24px;
+margin-bottom: 15px;
+}
+.detalles-jugador {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 15px;
+}
+.detalles-jugador p {
+margin-bottom: 10px;
+font-size: 16px;
+}
+.detalles-jugador strong {
+font-weight: 600;
+color: #2c5282;
+}
+/* Estilos de ofertas */
+.seccion-ofertas h3 {
+color: #2d3748;
+font-size: 20px;
+margin-bottom: 20px;
+border-left: 4px solid #3182ce;
+padding-left: 10px;
+}
+.lista-ofertas {
+list-style-type: none;
+}
+.oferta-item {
+background-color: #f8fafc;
+border: 1px solid #e2e8f0;
+border-radius: 8px;
+padding: 15px;
+margin-bottom: 15px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+transition: transform 0.2s ease;
+}
+.oferta-item:hover {
+transform: translateY(-3px);
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.oferta-cabecera {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 10px;
+}
+.oferta-cabecera h4 {
+font-size: 18px;
+color: #2c5282;
+}
+.oferta-monto {
+font-size: 18px;
+font-weight: bold;
+color: #2f855a;
+}
+.oferta-mensaje {
+font-style: italic;
+color: #4a5568;
+margin-bottom: 10px;
+padding: 5px 0;
+}
+.oferta-probabilidad {
+margin-bottom: 15px;
+font-size: 14px;
+}
+.prob-alta {
+color: #2f855a;
+font-weight: bold;
+}
+.prob-media {
+color: #dd6b20;
+font-weight: bold;
+}
+.prob-baja {
+color: #e53e3e;
+font-weight: bold;
+}
+.oferta-acciones {
+display: flex;
+gap: 10px;
+}
+/* Estilos de botones */
+button {
+padding: 8px 16px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-weight: 500;
+transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.btn-aceptar {
+background-color: #38a169;
+color: white;
+}
+.btn-aceptar:hover {
+background-color: #2f855a;
+}
+.btn-contraofertar {
+background-color: #3182ce;
+color: white;
+}
+.btn-contraofertar:hover {
+background-color: #2c5282;
+}
+.btn-rechazar {
+background-color: #e53e3e;
+color: white;
+}
+.btn-rechazar:hover {
+background-color: #c53030;
+}
+.btn-volver {
+background-color: #4a5568;
+color: white;
+margin-top: 20px;
+}
+.btn-volver:hover {
+background-color: #2d3748;
+}
+/* Mensajes de error y sin ofertas */
+.error-message, .sin-ofertas {
+background-color: #fed7d7;
+border: 1px solid #feb2b2;
+border-radius: 4px;
+padding: 15px;
+margin-bottom: 20px;
+color: #9b2c2c;
+}
+.sin-ofertas {
+background-color: #e2e8f0;
+border-color: #cbd5e0;
+color: #4a5568;
+}
+.sin-ofertas p {
+margin-bottom: 8px;
+}
+/* Botones de navegación */
+.botones-navegacion {
+display: flex;
+justify-content: center;
+margin-top: 30px;
+}
+/* Footer */
+footer {
+margin-top: 30px;
+text-align: center;
+color: #718096;
+font-size: 14px;
+}
+/* Estilos responsivos */
+@media (max-width: 768px) {
+.container {
+padding: 10px;
+}
+.detalles-jugador {
+    grid-template-columns: 1fr;
+}
+
+.oferta-cabecera {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.oferta-acciones {
+    flex-direction: column;
+}
+
+button {
+    width: 100%;
+    margin-bottom: 5px;
+}
+}

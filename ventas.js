@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => { 
   // Recuperar la información del jugador en venta desde localStorage
   const jugadorData = localStorage.getItem("jugadorEnVenta");
   

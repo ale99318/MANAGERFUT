@@ -14,12 +14,20 @@
         
         <main>
             <div id="contenidoVentas" class="contenido-ventas">
+                <!-- Contenido dinámico para errores si no hay jugador -->
+                
+                <!-- Sección de información del jugador -->
                 <div class="jugador-info">
-                    <h2 id="nombreJugador"></h2>
-                    <div id="infoJugador" class="detalles-jugador"></div>
+                    <h2 id="nombreJugador">Nombre del Jugador</h2>
+                    <div id="infoJugador" class="detalles-jugador">
+                        <!-- Información del jugador se carga dinámicamente -->
+                    </div>
                 </div>
                 
-                <div id="ofertas" class="seccion-ofertas"></div>
+                <!-- Sección de ofertas -->
+                <div id="ofertas" class="seccion-ofertas">
+                    <!-- Las ofertas se cargan dinámicamente -->
+                </div>
             </div>
         </main>
         
@@ -28,6 +36,21 @@
         </footer>
     </div>
     
+    <!-- Script para probar la página - ¡Eliminar en producción! -->
+    <script>
+        // Datos de ejemplo para probar la página
+        if (!localStorage.getItem("jugadorEnVenta")) {
+            const jugadorPrueba = {
+                nombre: "Carlos Sánchez",
+                posicion: "Delantero",
+                edad: 27,
+                club: "Tu Club",
+                valorGeneral: 78,
+                precioTransferencia: "1.200.000€"
+            };
+            localStorage.setItem("jugadorEnVenta", JSON.stringify(jugadorPrueba));
+        }
+    </script>
     <script src="ventas.js"></script>
 </body>
 </html>

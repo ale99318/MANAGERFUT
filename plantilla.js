@@ -40,26 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         sueldo: "30.000€ mensuales",
         potencialMejora: "Alto (debido a su edad)"
       }
-
-{
-        nombre: "Gonzalo Guerrero",
-        edad: 25,
-        posicion: "Delantero",
-        caracter: "Líder nato",
-        estadisticas: {
-          velocidad: 78,
-          sprint: 75,
-          disparo: 86,
-          pase: 79,
-          defensa: 45,
-          fisico: 82
-        },
-        valorGeneral: 74, // Suma de estadísticas dividida para obtener promedio
-        precioTransferencia: "800.000€",
-        sueldo: "30.000€ mensuales",
-        potencialMejora: "Alto (promesa)"
-      }
-      
     ],
     "Universitario": [
       {

@@ -1,508 +1,317 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Bird</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>Reto MORADO ARMY — Quiz BTS</title>
+  <style>
+    :root{
+      --bg1:#4b0082; /* indigo/purple */
+      --bg2:#7b1fa2;
+      --accent:#d1b3ff;
+      --card:#2a004d;
+      --glass: rgba(255,255,255,0.06);
+      --text:#f6f1ff;
+      --correct-border:#c77dff;
+      --wrong-border:#ff5f98;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:var(--text);
+      background: linear-gradient(135deg,var(--bg1) 0%, var(--bg2) 60%);
+      min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+    .container{width:980px;max-width:980px;margin:auto}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+    .logo{background:var(--glass);padding:10px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.2)}
+    h1{margin:0;font-size:24px;letter-spacing:0.6px}
+    p.lead{margin:4px 0 0;color:var(--accent);font-size:14px}
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, #87CEEB, #98FB98);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-            user-select: none;
-        }
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border-radius:14px;padding:16px;box-shadow:0 10px 30px rgba(10,0,30,0.35)}
 
-        #gameContainer {
-            position: relative;
-            width: 400px;
-            height: 600px;
-            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #228B22 70%, #228B22 100%);
-            border: 3px solid #333;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
+    .welcome{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .welcome .text{max-width:70%}
+    .welcome h2{margin:0;font-size:18px}
+    .welcome p{margin:6px 0 0;color:var(--accent);font-size:14px}
 
-        #gameCanvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+    .quiz-area{display:grid;grid-template-columns:1fr 240px;gap:14px}
+    .question{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02)}
+    .question h3{margin:0 0 8px;font-size:18px}
+    .options{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+    button.option{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;text-align:left;cursor:pointer;font-size:16px}
+    button.option:hover{transform:translateY(-2px)}
+    button.option.correct{border-color:var(--correct-border);background:linear-gradient(90deg, rgba(199,125,255,0.25), rgba(199,125,255,0.12));}
+    button.option.wrong{border-color:var(--wrong-border);background:linear-gradient(90deg, rgba(255,95,152,0.25), rgba(255,95,152,0.12));}
+    button.option:disabled{opacity:0.9;cursor:not-allowed}
 
-        #gameUI {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            font-size: 24px;
-            text-align: center;
-            z-index: 10;
-        }
+    .sidebar{padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+    .timer{font-size:48px;font-weight:800;text-align:center}
+    .meta{margin-top:12px;text-align:center}
+    .meta p{margin:6px 0}
+    .controls{display:flex;gap:8px;justify-content:center;margin-top:12px}
+    .btn{background:var(--accent);color:#2b0140;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
 
-        #gameUI.hidden {
-            display: none;
-        }
+    .result{margin-top:14px;padding:10px;border-radius:10px;text-align:center}
+    .hidden{display:none}
 
-        #score {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 36px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            z-index: 5;
-        }
+    footer{margin-top:12px;text-align:center;color:rgba(255,255,255,0.6);font-size:13px}
 
-        .btn {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
+    /* mobile friendly adjustments */
+    @media (max-width:600px){
+      .container{max-width:100%;padding:8px}
+      header{flex-direction:row;gap:10px}
+      .quiz-area{grid-template-columns:1fr}
+      .welcome{flex-direction:row}
+      .welcome .text{max-width:60%}
+      .sidebar{order:2}
+      .question{order:1}
+      button.option{font-size:18px;padding:14px;border-radius:12px}
+      .timer{font-size:40px}
+      .logo{padding:8px 10px}
+      h1{font-size:20px}
+    }
 
-        .btn:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        #instructions {
-            margin: 20px 0;
-            font-size: 16px;
-            max-width: 300px;
-            line-height: 1.5;
-        }
-
-        .cloud {
-            position: absolute;
-            background: white;
-            border-radius: 50px;
-            opacity: 0.8;
-            animation: float 20s infinite linear;
-        }
-
-        .cloud:before {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50px;
-        }
-
-        .cloud:after {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50px;
-        }
-
-        .cloud1 {
-            width: 80px;
-            height: 40px;
-            top: 50px;
-            left: -80px;
-        }
-
-        .cloud1:before {
-            width: 50px;
-            height: 50px;
-            top: -25px;
-            left: 10px;
-        }
-
-        .cloud1:after {
-            width: 60px;
-            height: 40px;
-            top: -15px;
-            right: 10px;
-        }
-
-        .cloud2 {
-            width: 60px;
-            height: 30px;
-            top: 100px;
-            left: -60px;
-            animation-delay: -10s;
-        }
-
-        .cloud2:before {
-            width: 40px;
-            height: 40px;
-            top: -20px;
-            left: 5px;
-        }
-
-        .cloud2:after {
-            width: 50px;
-            height: 30px;
-            top: -10px;
-            right: 5px;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(480px);
-            }
-        }
-
-        @media (max-width: 450px) {
-            #gameContainer {
-                width: 100vw;
-                height: 100vh;
-                border: none;
-                border-radius: 0;
-            }
-        }
-    </style>
+    /* make buttons large enough for touch */
+    @media (pointer:coarse){
+      button.option{padding:16px;font-size:18px}
+    }
+  </style>
 </head>
 <body>
-    <div id="gameContainer">
-        <div class="cloud cloud1"></div>
-        <div class="cloud cloud2"></div>
-        <canvas id="gameCanvas" width="400" height="600"></canvas>
-        <div id="score">0</div>
-        <div id="rewardMessage">
-            <div class="reward-title">🎉 ¡FELICITACIONES! 🎉</div>
-            <div class="reward-text" id="rewardText"></div>
-            <button class="reward-close" onclick="closeReward()">Continuar</button>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <strong style="font-size:16px">Reto MORADO ARMY</strong>
+        <div style="font-size:12px;color:var(--accent)">Quiz BTS — 5 segundos por pregunta</div>
+      </div>
+      <div>
+        <h1>Reto MORADO ARMY</h1>
+        <p class="lead">Pon a prueba tus conocimientos de BTS. ¡Responde rápido!</p>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="welcome">
+        <div class="text">
+          <h2>¡Bienvenido, Cory! 💜</h2>
+          <p>Prepárate para el <strong>Reto MORADO ARMY</strong>. Tienes 5 segundos para elegir la opción correcta en cada pregunta. ¡Suerte!</p>
         </div>
-        <div id="gameUI">
-            <h1>🐦 Flappy Bird</h1>
-            <div id="instructions">
-                <p><strong>PC:</strong> Presiona ESPACIO para volar</p>
-                <p><strong>Móvil:</strong> Toca la pantalla para volar</p>
-                <p>¡Evita las tuberías y consigue la puntuación más alta!</p>
-            </div>
-            <button class="btn" onclick="startGame()">Iniciar Juego</button>
-            <div id="gameOverText" style="display: none;">
-                <h2>¡Juego Terminado!</h2>
-                <p>Puntuación: <span id="finalScore">0</span></p>
-                <button class="btn" onclick="startGame()">Jugar de Nuevo</button>
-            </div>
+        <div>
+          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='110'><rect rx='18' width='100%' height='100%' fill='%23ffffff' opacity='0.02'/><text x='50%' y='55%' font-size='22' font-family='Arial' fill='%23f6f1ff' text-anchor='middle'>💜</text></svg>" alt="morado" style="width:88px;height:88px;border-radius:12px;" />
         </div>
+      </div>
+
+      <div class="quiz-area">
+        <div>
+          <div class="question">
+            <h3 id="questionText">Pregunta</h3>
+            <div class="options" id="options"></div>
+          </div>
+
+          <div class="result hidden" id="resultBox"></div>
+        </div>
+
+        <aside class="sidebar">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:12px;opacity:0.8">Tiempo</div>
+              <div class="timer" id="timer">5</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:12px;opacity:0.8">Puntos</div>
+              <div style="font-size:22px;font-weight:700" id="score">0</div>
+            </div>
+          </div>
+
+          <div class="meta">
+            <p id="progress">Pregunta 0 / 0</p>
+            <div class="controls">
+              <button class="btn" id="startBtn">Comenzar</button>
+              <button class="btn ghost" id="restartBtn">Reiniciar</button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <footer>
+        Juego creado para fans de BTS — responde antes de que se acabe el tiempo. 💜
+      </footer>
     </div>
+  </div>
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const gameUI = document.getElementById('gameUI');
-        const scoreElement = document.getElementById('score');
-        const gameOverText = document.getElementById('gameOverText');
-        const finalScoreElement = document.getElementById('finalScore');
+  <script>
+    // Preguntas de ejemplo (in Spanish)
+    const questions = [
+      {
+        q: '¿Cuál es el nombre del fandom oficial de BTS?',
+        options: ['BLINK', 'ARMY', 'BTS ARMY', 'MOA'],
+        answer: 1
+      },
+      {
+        q: '¿Cuál es el nombre real del miembro conocido como RM?',
+        options: ['Kim Namjoon', 'Min Yoongi', 'Jung Hoseok', 'Park Jimin'],
+        answer: 0
+      },
+      {
+        q: '¿En qué país debutó BTS por primera vez?',
+        options: ['Corea del Sur', 'Japón', 'Estados Unidos', 'China'],
+        answer: 0
+      },
+      {
+        q: '¿Cuál canción es conocida por la frase "I purple you" popularizada por un miembro?',
+        options: ['Dynamite', 'Fake Love', 'Spring Day', 'Idol'],
+        answer: 2
+      },
+      {
+        q: '¿Quién es conocido por su apodo "Suga"?',
+        options: ['J-Hope', 'Suga', 'V', 'Jungkook'],
+        answer: 1
+      },
+      {
+        q: '¿Qué miembro canta la parte principal en muchas baladas y es conocido por su voz suave?',
+        options: ['Jungkook', 'Jimin', 'V', 'All of them'],
+        answer: 2
+      }
+    ];
 
-        let gameState = 'menu'; // 'menu', 'playing', 'gameOver'
-        let score = 0;
-        let gameSpeed = 2;
-        let rewardsGiven = []; // Track which rewards have been given
+    // state
+    let current = 0;
+    let score = 0;
+    let timer = 5;
+    let intervalId = null;
+    let accepting = false;
 
-        // Bird object
-        const bird = {
-            x: 80,
-            y: 300,
-            width: 30,
-            height: 30,
-            velocity: 0,
-            gravity: 0.5,
-            jumpPower: -8,
-            color: '#FFD700'
-        };
+    const questionText = document.getElementById('questionText');
+    const optionsBox = document.getElementById('options');
+    const timerEl = document.getElementById('timer');
+    const scoreEl = document.getElementById('score');
+    const progressEl = document.getElementById('progress');
+    const startBtn = document.getElementById('startBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const resultBox = document.getElementById('resultBox');
 
-        // Pipes array
-        let pipes = [];
-        const pipeWidth = 60;
-        const pipeGap = 180;
-        let pipeTimer = 0;
+    function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
-        // Background elements
-        let clouds = [];
+    function startQuiz(){
+      current = 0; score = 0; scoreEl.textContent = score; resultBox.classList.add('hidden');
+      // copy and shuffle questions to avoid modifying original
+      window._q = shuffle(questions.slice());
+      startBtn.textContent = 'Siguiente';
+      renderQuestion();
+    }
 
-        function resetGame() {
-            bird.y = 300;
-            bird.velocity = 0;
-            pipes = [];
-            score = 0;
-            pipeTimer = 0;
-            gameSpeed = 2;
-            rewardsGiven = [];
-            updateScore();
+    function renderQuestion(){
+      if(!window._q || current >= window._q.length){
+        showFinal();
+        return;
+      }
+      const item = window._q[current];
+      questionText.textContent = item.q;
+      optionsBox.innerHTML = '';
+      // create option buttons
+      item.options.forEach((opt, idx)=>{
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = opt;
+        btn.disabled = false;
+        btn.addEventListener('click', ()=> selectOption(idx, btn));
+        optionsBox.appendChild(btn);
+      });
+      progressEl.textContent = `Pregunta ${current+1} / ${window._q.length}`;
+      // reset timer
+      timer = 5; timerEl.textContent = timer; accepting = true;
+      if(intervalId) clearInterval(intervalId);
+      intervalId = setInterval(()=>{
+        timer--;
+        timerEl.textContent = timer;
+        if(timer <= 0){
+          clearInterval(intervalId);
+          timeUp();
         }
+      },1000);
+    }
 
-        function startGame() {
-            gameState = 'playing';
-            gameUI.classList.add('hidden');
-            resetGame();
-            gameLoop();
-        }
+    function selectOption(selectedIdx, btnEl){
+      if(!accepting) return;
+      accepting = false;
+      clearInterval(intervalId);
+      const correctIdx = window._q[current].answer;
+      const optionButtons = Array.from(document.querySelectorAll('.option'));
+      optionButtons.forEach((b,i)=>b.disabled = true);
 
-        function endGame() {
-            gameState = 'gameOver';
-            gameUI.classList.remove('hidden');
-            gameOverText.style.display = 'block';
-            finalScoreElement.textContent = score;
-            document.querySelector('#instructions').style.display = 'none';
-        }
+      if(selectedIdx === correctIdx){
+        btnEl.classList.add('correct');
+        score += 1;
+        scoreEl.textContent = score;
+        showResult(true);
+      } else {
+        btnEl.classList.add('wrong');
+        if(optionButtons[correctIdx]) optionButtons[correctIdx].classList.add('correct');
+        showResult(false);
+      }
+      current += 1;
+    }
 
-        function updateScore() {
-            scoreElement.textContent = score;
-            checkRewards();
-        }
+    function timeUp(){
+      accepting = false;
+      const optionButtons = Array.from(document.querySelectorAll('.option'));
+      optionButtons.forEach((b,i)=>b.disabled = true);
+      // mark correct
+      const correctIdx = window._q[current].answer;
+      if(optionButtons[correctIdx]) optionButtons[correctIdx].classList.add('correct');
+      showResult(null); // null means time out
+      current += 1;
+    }
 
-        function checkRewards() {
-            if (score >= 1000 && !rewardsGiven.includes(1000)) {
-                showReward(1000, "🎊 ¡INCREÍBLE! 🎊", "¡Has alcanzado 1000 puntos!<br><br>🏆 <strong>PREMIO MÁXIMO:</strong><br>• 1 Perfil IPTV Premium<br>• 1 Perfil Disney+ Premium<br>• 1 Perfil MAX Premium<br><br>¡Eres un maestro del juego! 🎮✨");
-                rewardsGiven.push(1000);
-            } else if (score >= 800 && !rewardsGiven.includes(800)) {
-                showReward(800, "🎉 ¡FANTÁSTICO! 🎉", "¡Has alcanzado 800 puntos!<br><br>🎬 <strong>PREMIO GANADO:</strong><br>• 1 Perfil Disney+ Premium<br>• 1 Perfil MAX Premium<br><br>¡Sigue así, estás cerca del premio máximo! 💫");
-                rewardsGiven.push(800);
-            } else if (score >= 500 && !rewardsGiven.includes(500)) {
-                showReward(500, "🎊 ¡EXCELENTE! 🎊", "¡Has alcanzado 500 puntos!<br><br>📺 <strong>PREMIO GANADO:</strong><br>• 1 Perfil MAX Premium<br><br>¡Continúa jugando para más premios! 🚀");
-                rewardsGiven.push(500);
-            }
-        }
+    function showResult(ok){
+      resultBox.classList.remove('hidden');
+      if(ok === true){
+        resultBox.textContent = '¡Correcto! +1 punto';
+        resultBox.style.background = 'linear-gradient(90deg, rgba(124,255,178,0.06), rgba(255,255,255,0.01))';
+      } else if(ok === false){
+        resultBox.textContent = 'Respuesta incorrecta.';
+        resultBox.style.background = 'linear-gradient(90deg, rgba(255,139,139,0.04), rgba(255,255,255,0.01))';
+      } else {
+        resultBox.textContent = 'Se acabó el tiempo.';
+        resultBox.style.background = 'linear-gradient(90deg, rgba(255,215,130,0.04), rgba(255,255,255,0.01))';
+      }
+      // automatically move on after a short pause
+      setTimeout(()=>{
+        resultBox.classList.add('hidden');
+        renderQuestion();
+      },900);
+    }
 
-        function showReward(points, title, message) {
-            gameState = 'reward';
-            document.getElementById('rewardMessage').style.display = 'block';
-            document.querySelector('.reward-title').innerHTML = title;
-            document.getElementById('rewardText').innerHTML = message;
-            
-            // Pause game temporarily
-            setTimeout(() => {
-                if (gameState === 'reward') {
-                    gameState = 'playing';
-                    document.getElementById('rewardMessage').style.display = 'none';
-                    gameLoop();
-                }
-            }, 8000); // Auto-close after 8 seconds
-        }
+    function showFinal(){
+      // Consider player "lost" if score is less than total questions (user requested a "Perdiste xd" message)
+      const lost = score < window._q.length;
+      questionText.textContent = lost ? 'Perdiste xd 💜' : '¡Terminaste el Reto!';
+      optionsBox.innerHTML = `<div style="padding:12px">Tu puntaje final es <strong>${score} / ${window._q.length}</strong></div>`;
+      progressEl.textContent = `Pregunta ${window._q.length} / ${window._q.length}`;
+      timerEl.textContent = '-';
+      startBtn.textContent = 'Volver a jugar';
+    }
 
-        function closeReward() {
-            gameState = 'playing';
-            document.getElementById('rewardMessage').style.display = 'none';
-            gameLoop();
-        }
+    startBtn.addEventListener('click', ()=>{
+      // if not started or finished, start or restart
+      if(startBtn.textContent === 'Comenzar' || startBtn.textContent === 'Volver a jugar'){
+        startQuiz();
+      } else {
+        // if it's 'Siguiente' and quiz running, skip to next question
+        accepting = false; clearInterval(intervalId); current += 1; renderQuestion();
+      }
+    });
 
-        function drawBird() {
-            ctx.save();
-            ctx.translate(bird.x + bird.width/2, bird.y + bird.height/2);
-            
-            // Rotate bird based on velocity
-            const rotation = Math.min(Math.max(bird.velocity * 0.1, -0.5), 0.5);
-            ctx.rotate(rotation);
-            
-            // Draw bird body
-            ctx.fillStyle = bird.color;
-            ctx.fillRect(-bird.width/2, -bird.height/2, bird.width, bird.height);
-            
-            // Draw bird wing
-            ctx.fillStyle = '#FFA500';
-            ctx.fillRect(-bird.width/2 + 5, -bird.height/2 + 5, 15, 10);
-            
-            // Draw bird eye
-            ctx.fillStyle = 'white';
-            ctx.fillRect(-bird.width/2 + 18, -bird.height/2 + 5, 8, 8);
-            ctx.fillStyle = 'black';
-            ctx.fillRect(-bird.width/2 + 20, -bird.height/2 + 7, 4, 4);
-            
-            // Draw beak
-            ctx.fillStyle = '#FF6347';
-            ctx.fillRect(bird.width/2 - 5, -bird.height/2 + 10, 10, 5);
-            
-            ctx.restore();
-        }
+    restartBtn.addEventListener('click', ()=>{
+      if(intervalId) clearInterval(intervalId);
+      current = 0; score = 0; scoreEl.textContent = score; timerEl.textContent = 5; questionText.textContent = 'Presiona Comenzar para iniciar el Reto'; optionsBox.innerHTML = '';
+      startBtn.textContent = 'Comenzar'; resultBox.classList.add('hidden'); progressEl.textContent = `Pregunta 0 / ${questions.length}`;
+    });
 
-        function drawPipe(pipe) {
-            // Draw pipe gradient
-            const gradient = ctx.createLinearGradient(pipe.x, 0, pipe.x + pipeWidth, 0);
-            gradient.addColorStop(0, '#228B22');
-            gradient.addColorStop(0.5, '#32CD32');
-            gradient.addColorStop(1, '#228B22');
-            
-            ctx.fillStyle = gradient;
-            
-            // Top pipe
-            ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
-            
-            // Bottom pipe
-            ctx.fillRect(pipe.x, pipe.topHeight + pipeGap, pipeWidth, canvas.height - pipe.topHeight - pipeGap);
-            
-            // Pipe caps
-            ctx.fillStyle = '#006400';
-            ctx.fillRect(pipe.x - 5, pipe.topHeight - 20, pipeWidth + 10, 20);
-            ctx.fillRect(pipe.x - 5, pipe.topHeight + pipeGap, pipeWidth + 10, 20);
-        }
+    // set initial state
+    restartBtn.click();
 
-        function drawBackground() {
-            // Sky gradient
-            const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.7);
-            skyGradient.addColorStop(0, '#87CEEB');
-            skyGradient.addColorStop(1, '#98FB98');
-            
-            ctx.fillStyle = skyGradient;
-            ctx.fillRect(0, 0, canvas.width, canvas.height * 0.7);
-            
-            // Ground
-            ctx.fillStyle = '#228B22';
-            ctx.fillRect(0, canvas.height * 0.7, canvas.width, canvas.height * 0.3);
-            
-            // Ground pattern
-            ctx.fillStyle = '#32CD32';
-            for (let i = 0; i < canvas.width; i += 40) {
-                ctx.fillRect(i, canvas.height * 0.7, 20, canvas.height * 0.3);
-            }
-        }
-
-        function updateBird() {
-            bird.velocity += bird.gravity;
-            bird.y += bird.velocity;
-            
-            // Keep bird in bounds
-            if (bird.y < 0) {
-                bird.y = 0;
-                bird.velocity = 0;
-            }
-            if (bird.y + bird.height > canvas.height) {
-                endGame();
-            }
-        }
-
-        function updatePipes() {
-            pipeTimer++;
-            
-            // Add new pipe
-            if (pipeTimer % 120 === 0) {
-                const topHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
-                pipes.push({
-                    x: canvas.width,
-                    topHeight: topHeight,
-                    passed: false
-                });
-            }
-            
-            // Update existing pipes
-            pipes.forEach((pipe, index) => {
-                pipe.x -= gameSpeed;
-                
-                // Remove off-screen pipes
-                if (pipe.x + pipeWidth < 0) {
-                    pipes.splice(index, 1);
-                }
-                
-                // Check for scoring
-                if (!pipe.passed && pipe.x + pipeWidth < bird.x) {
-                    pipe.passed = true;
-                    score++;
-                    updateScore();
-                    
-                    // Increase speed slightly
-                    if (score % 5 === 0) {
-                        gameSpeed += 0.2;
-                    }
-                }
-            });
-        }
-
-        function checkCollisions() {
-            pipes.forEach(pipe => {
-                // Check collision with top pipe
-                if (bird.x < pipe.x + pipeWidth &&
-                    bird.x + bird.width > pipe.x &&
-                    bird.y < pipe.topHeight) {
-                    endGame();
-                }
-                
-                // Check collision with bottom pipe
-                if (bird.x < pipe.x + pipeWidth &&
-                    bird.x + bird.width > pipe.x &&
-                    bird.y + bird.height > pipe.topHeight + pipeGap) {
-                    endGame();
-                }
-            });
-        }
-
-        function jump() {
-            if (gameState === 'playing') {
-                bird.velocity = bird.jumpPower;
-            }
-        }
-
-        function gameLoop() {
-            if (gameState !== 'playing') return;
-            
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw background
-            drawBackground();
-            
-            // Update game objects
-            updateBird();
-            updatePipes();
-            checkCollisions();
-            
-            // Draw pipes
-            pipes.forEach(drawPipe);
-            
-            // Draw bird
-            drawBird();
-            
-            // Continue game loop
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Event listeners
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                jump();
-            }
-        });
-
-        canvas.addEventListener('click', jump);
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            jump();
-        });
-
-        // Prevent scrolling on mobile
-        document.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-
-        // Initialize
-        drawBackground();
-        drawBird();
-    </script>
+  </script>
 </body>
 </html>

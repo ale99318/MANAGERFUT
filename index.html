@@ -56,6 +56,23 @@
     .result{margin-top:14px;padding:10px;border-radius:10px;text-align:center}
     .hidden{display:none}
 
+    .rank-badge{display:inline-block;padding:6px 14px;border-radius:20px;font-weight:700;font-size:14px;margin:8px 0;
+      background:linear-gradient(135deg, #c77dff, #9d4edd);box-shadow:0 4px 12px rgba(199,125,255,0.3)}
+
+    .rank-table{margin-top:16px;padding:12px;background:rgba(255,255,255,0.02);border-radius:10px}
+    .rank-row{display:flex;justify-content:space-between;padding:10px;margin:6px 0;border-radius:8px;background:rgba(255,255,255,0.03)}
+    .rank-row.achieved{background:linear-gradient(90deg, rgba(199,125,255,0.15), rgba(199,125,255,0.05));border-left:3px solid var(--correct-border)}
+    .rank-row.locked{opacity:0.5}
+    .rank-name{font-weight:600;display:flex;align-items:center;gap:8px}
+    .rank-requirement{color:var(--accent);font-size:14px}
+
+    .progress-bar{width:100%;height:8px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;margin-top:8px}
+    .progress-fill{height:100%;background:linear-gradient(90deg, #c77dff, #9d4edd);transition:width 0.5s ease;border-radius:10px}
+
+    .final-stats{text-align:center;padding:16px}
+    .final-stats h2{margin:0 0 8px;font-size:28px}
+    .final-stats .score-display{font-size:48px;font-weight:800;color:var(--accent);margin:12px 0}
+
     footer{margin-top:12px;text-align:center;color:rgba(255,255,255,0.6);font-size:13px}
 
     @media (max-width:600px){
@@ -71,12 +88,20 @@
       .timer{font-size:56px}
       h1{font-size:22px}
       p.lead{font-size:15px}
+      .rank-row{flex-direction:column;gap:4px}
+      .final-stats .score-display{font-size:36px}
     }
 
     @media (pointer:coarse){
       button.option{padding:18px;font-size:19px;min-height:64px}
       .btn{padding:12px 16px;font-size:16px}
     }
+
+    @keyframes celebrate{
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.1)}
+    }
+    .celebrating{animation:celebrate 0.5s ease}
   </style>
 </head>
 <body>
@@ -245,6 +270,13 @@
       }
     ];
 
+    const ranks = [
+      { name: 'Baby ARMY', emoji: '💜', required: 5 },
+      { name: 'ARMY', emoji: '⭐', required: 10 },
+      { name: 'Super ARMY', emoji: '🌟', required: 15 },
+      { name: 'Mega ARMY Suprema', emoji: '👑', required: 20 }
+    ];
+
     let current = 0;
     let score = 0;
     let timer = 10;
@@ -261,6 +293,24 @@
     const resultBox = document.getElementById('resultBox');
 
     function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+    function getRank(score){
+      for(let i = ranks.length - 1; i >= 0; i--){
+        if(score >= ranks[i].required){
+          return ranks[i];
+        }
+      }
+      return null;
+    }
+
+    function getNextRank(score){
+      for(let i = 0; i < ranks.length; i++){
+        if(score < ranks[i].required){
+          return ranks[i];
+        }
+      }
+      return null;
+    }
 
     function startQuiz(){
       current = 0; score = 0; scoreEl.textContent = score; resultBox.classList.add('hidden');
@@ -310,6 +360,8 @@
         btnEl.classList.add('correct');
         score += 1;
         scoreEl.textContent = score;
+        scoreEl.classList.add('celebrating');
+        setTimeout(()=>scoreEl.classList.remove('celebrating'), 500);
         showResult(true);
       } else {
         btnEl.classList.add('wrong');
@@ -348,9 +400,53 @@
     }
 
     function showFinal(){
-      const lost = score < window._q.length;
-      questionText.textContent = lost ? 'Perdiste xd 💜' : '¡Terminaste el Reto!';
-      optionsBox.innerHTML = `<div style="padding:12px">Tu puntaje final es <strong>${score} / ${window._q.length}</strong></div>`;
+      const currentRank = getRank(score);
+      const nextRank = getNextRank(score);
+      
+      let rankHTML = '';
+      if(currentRank){
+        rankHTML = `<div class="rank-badge">${currentRank.emoji} ${currentRank.name}</div>`;
+      } else {
+        rankHTML = `<div style="color:var(--accent);margin:8px 0">¡Sigue intentando! 💜</div>`;
+      }
+
+      let nextRankHTML = '';
+      if(nextRank){
+        const pointsNeeded = nextRank.required - score;
+        nextRankHTML = `<p style="color:var(--accent);margin-top:8px">Te faltaron ${pointsNeeded} respuesta${pointsNeeded>1?'s':''} correcta${pointsNeeded>1?'s':''} para llegar a <strong>${nextRank.name}</strong> ${nextRank.emoji}</p>`;
+      } else {
+        nextRankHTML = `<p style="color:#ffd700;margin-top:8px;font-weight:700">¡Felicidades! Alcanzaste el rango máximo 👑</p>`;
+      }
+
+      const progressPercent = (score / window._q.length) * 100;
+
+      let rankTableHTML = '<div class="rank-table"><h3 style="margin:0 0 12px;text-align:center">Tabla de Rangos</h3>';
+      ranks.forEach(rank => {
+        const achieved = score >= rank.required;
+        const rowClass = achieved ? 'rank-row achieved' : 'rank-row locked';
+        const checkmark = achieved ? '✓' : '🔒';
+        rankTableHTML += `
+          <div class="${rowClass}">
+            <div class="rank-name">${checkmark} ${rank.emoji} ${rank.name}</div>
+            <div class="rank-requirement">${rank.required} correctas</div>
+          </div>
+        `;
+      });
+      rankTableHTML += '</div>';
+
+      questionText.innerHTML = `
+        <div class="final-stats">
+          <h2>¡Completaste el Reto!</h2>
+          <div class="score-display">${score} / ${window._q.length}</div>
+          ${rankHTML}
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${progressPercent}%"></div>
+          </div>
+          ${nextRankHTML}
+        </div>
+      `;
+      
+      optionsBox.innerHTML = rankTableHTML;
       progressEl.textContent = `Pregunta ${window._q.length} / ${window._q.length}`;
       timerEl.textContent = '-';
       startBtn.textContent = 'Volver a jugar';

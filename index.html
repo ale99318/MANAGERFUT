@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
-  <title>Reto MORADO ARMY — Quiz BTS</title>
+  <title>Reto MORADO ARMY — Quiz BTS (10 seg)</title>
   <style>
     :root{
-      --bg1:#4b0082; /* indigo/purple */
+      --bg1:#4b0082;
       --bg2:#7b1fa2;
       --accent:#d1b3ff;
       --card:#2a004d;
@@ -38,7 +38,7 @@
     .question{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02)}
     .question h3{margin:0 0 8px;font-size:18px}
     .options{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-    button.option{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;text-align:left;cursor:pointer;font-size:16px}
+    button.option{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;text-align:left;cursor:pointer;font-size:16px;color:var(--text);transition:all 0.2s}
     button.option:hover{transform:translateY(-2px)}
     button.option.correct{border-color:var(--correct-border);background:linear-gradient(90deg, rgba(199,125,255,0.25), rgba(199,125,255,0.12));}
     button.option.wrong{border-color:var(--wrong-border);background:linear-gradient(90deg, rgba(255,95,152,0.25), rgba(255,95,152,0.12));}
@@ -49,7 +49,8 @@
     .meta{margin-top:12px;text-align:center}
     .meta p{margin:6px 0}
     .controls{display:flex;gap:8px;justify-content:center;margin-top:12px}
-    .btn{background:var(--accent);color:#2b0140;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    .btn{background:var(--accent);color:#2b0140;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700;transition:all 0.2s}
+    .btn:hover{transform:scale(1.05)}
     .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
 
     .result{margin-top:14px;padding:10px;border-radius:10px;text-align:center}
@@ -57,24 +58,24 @@
 
     footer{margin-top:12px;text-align:center;color:rgba(255,255,255,0.6);font-size:13px}
 
-    /* mobile friendly adjustments */
     @media (max-width:600px){
       .container{max-width:100%;padding:8px}
-      header{flex-direction:row;gap:10px}
+      header{flex-direction:column;gap:8px;text-align:center}
+      .logo{width:100%}
       .quiz-area{grid-template-columns:1fr}
-      .welcome{flex-direction:row}
-      .welcome .text{max-width:60%}
-      .sidebar{order:2}
+      .welcome{flex-direction:column;text-align:center}
+      .welcome .text{max-width:100%}
+      .sidebar{order:-1;margin-bottom:12px}
       .question{order:1}
-      button.option{font-size:18px;padding:14px;border-radius:12px}
-      .timer{font-size:40px}
-      .logo{padding:8px 10px}
-      h1{font-size:20px}
+      button.option{font-size:18px;padding:16px;border-radius:12px}
+      .timer{font-size:56px}
+      h1{font-size:22px}
+      p.lead{font-size:15px}
     }
 
-    /* make buttons large enough for touch */
     @media (pointer:coarse){
-      button.option{padding:16px;font-size:18px}
+      button.option{padding:18px;font-size:19px;min-height:64px}
+      .btn{padding:12px 16px;font-size:16px}
     }
   </style>
 </head>
@@ -83,7 +84,7 @@
     <header>
       <div class="logo">
         <strong style="font-size:16px">Reto MORADO ARMY</strong>
-        <div style="font-size:12px;color:var(--accent)">Quiz BTS — 5 segundos por pregunta</div>
+        <div style="font-size:12px;color:var(--accent)">Quiz BTS — 10 segundos por pregunta</div>
       </div>
       <div>
         <h1>Reto MORADO ARMY</h1>
@@ -95,7 +96,7 @@
       <div class="welcome">
         <div class="text">
           <h2>¡Bienvenido! 💜</h2>
-          <p>Prepárate para el <strong>Reto MORADO ARMY</strong>. Tienes 5 segundos para elegir la opción correcta en cada pregunta. ¡Suerte!</p>
+          <p>Prepárate para el <strong>Reto MORADO ARMY</strong>. Tienes 10 segundos para elegir la opción correcta en cada pregunta. ¡Suerte!</p>
         </div>
         <div>
           <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='110'><rect rx='18' width='100%' height='100%' fill='%23ffffff' opacity='0.02'/><text x='50%' y='55%' font-size='22' font-family='Arial' fill='%23f6f1ff' text-anchor='middle'>💜</text></svg>" alt="morado" style="width:88px;height:88px;border-radius:12px;" />
@@ -116,7 +117,7 @@
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div>
               <div style="font-size:12px;opacity:0.8">Tiempo</div>
-              <div class="timer" id="timer">5</div>
+              <div class="timer" id="timer">10</div>
             </div>
             <div style="text-align:right">
               <div style="font-size:12px;opacity:0.8">Puntos</div>
@@ -141,44 +142,112 @@
   </div>
 
   <script>
-    // Preguntas de ejemplo (in Spanish)
     const questions = [
       {
         q: '¿Cuál es el nombre del fandom oficial de BTS?',
-        options: ['BLINK', 'ARMY', 'BTS ARMY', 'MOA'],
+        options: ['BLINK', 'ARMY', 'ONCE', 'MOA'],
         answer: 1
       },
       {
-        q: '¿Cuál es el nombre real del miembro conocido como RM?',
+        q: '¿Cuál es el nombre real de RM?',
         options: ['Kim Namjoon', 'Min Yoongi', 'Jung Hoseok', 'Park Jimin'],
         answer: 0
       },
       {
-        q: '¿En qué país debutó BTS por primera vez?',
-        options: ['Corea del Sur', 'Japón', 'Estados Unidos', 'China'],
-        answer: 0
-      },
-      {
-        q: '¿Cuál canción es conocida por la frase "I purple you" popularizada por un miembro?',
-        options: ['Dynamite', 'Fake Love', 'Spring Day', 'Idol'],
+        q: '¿En qué año debutó BTS?',
+        options: ['2011', '2012', '2013', '2014'],
         answer: 2
       },
       {
-        q: '¿Quién es conocido por su apodo "Suga"?',
-        options: ['J-Hope', 'Suga', 'V', 'Jungkook'],
+        q: '¿Cuál es el nombre real de Suga?',
+        options: ['Jung Hoseok', 'Min Yoongi', 'Kim Taehyung', 'Jeon Jungkook'],
         answer: 1
       },
       {
-        q: '¿Qué miembro canta la parte principal en muchas baladas y es conocido por su voz suave?',
-        options: ['Jungkook', 'Jimin', 'V', 'All of them'],
+        q: '¿Qué significa BTS en coreano?',
+        options: ['Bangtan Sonyeondan', 'Beyond The Scene', 'Boys To Success', 'Born To Shine'],
+        answer: 0
+      },
+      {
+        q: '¿Quién es el miembro más joven de BTS?',
+        options: ['Jimin', 'V', 'Jungkook', 'Jin'],
         answer: 2
+      },
+      {
+        q: '¿Cuál fue la primera canción de BTS en alcanzar #1 en Billboard Hot 100?',
+        options: ['Dynamite', 'Butter', 'Boy With Luv', 'Life Goes On'],
+        answer: 0
+      },
+      {
+        q: '¿Qué miembro popularizó la frase "I purple you"?',
+        options: ['RM', 'Jin', 'V', 'Jimin'],
+        answer: 2
+      },
+      {
+        q: '¿Cuál es el nombre real de J-Hope?',
+        options: ['Park Jimin', 'Kim Seokjin', 'Jung Hoseok', 'Kim Taehyung'],
+        answer: 2
+      },
+      {
+        q: '¿En qué ciudad nació Jimin?',
+        options: ['Seúl', 'Busan', 'Daegu', 'Gwangju'],
+        answer: 1
+      },
+      {
+        q: '¿Cuál es el nombre de la compañía discográfica de BTS?',
+        options: ['YG Entertainment', 'SM Entertainment', 'Big Hit Entertainment', 'JYP Entertainment'],
+        answer: 2
+      },
+      {
+        q: '¿Qué miembro tiene el apodo "Golden Maknae"?',
+        options: ['Jimin', 'V', 'Jin', 'Jungkook'],
+        answer: 3
+      },
+      {
+        q: '¿Cuál álbum incluye la canción "Spring Day"?',
+        options: ['Wings', 'You Never Walk Alone', 'Love Yourself: Her', 'Map of the Soul: 7'],
+        answer: 1
+      },
+      {
+        q: '¿Qué miembro es conocido por su amor a los animales y tiene una perrita llamada Yeontan?',
+        options: ['Jin', 'Suga', 'V', 'Jimin'],
+        answer: 2
+      },
+      {
+        q: '¿Cuántos miembros tiene BTS?',
+        options: ['5', '6', '7', '8'],
+        answer: 2
+      },
+      {
+        q: '¿Qué canción de BTS tiene un MV con más de 1 billón de vistas en YouTube?',
+        options: ['DNA', 'Boy With Luv', 'Dynamite', 'Fake Love'],
+        answer: 1
+      },
+      {
+        q: '¿Cuál es el nombre real de Jin?',
+        options: ['Kim Seokjin', 'Kim Namjoon', 'Kim Taehyung', 'Park Jimin'],
+        answer: 0
+      },
+      {
+        q: '¿Qué miembro es el líder de BTS?',
+        options: ['Jin', 'Suga', 'RM', 'J-Hope'],
+        answer: 2
+      },
+      {
+        q: '¿En qué año BTS presentó en los Grammy Awards por primera vez?',
+        options: ['2018', '2019', '2020', '2021'],
+        answer: 2
+      },
+      {
+        q: '¿Cuál es el nombre del reality show de BTS?',
+        options: ['Run BTS', 'BTS In The House', 'Bangtan Bomb', 'BTS World'],
+        answer: 0
       }
     ];
 
-    // state
     let current = 0;
     let score = 0;
-    let timer = 5;
+    let timer = 10;
     let intervalId = null;
     let accepting = false;
 
@@ -195,7 +264,6 @@
 
     function startQuiz(){
       current = 0; score = 0; scoreEl.textContent = score; resultBox.classList.add('hidden');
-      // copy and shuffle questions to avoid modifying original
       window._q = shuffle(questions.slice());
       startBtn.textContent = 'Siguiente';
       renderQuestion();
@@ -209,7 +277,6 @@
       const item = window._q[current];
       questionText.textContent = item.q;
       optionsBox.innerHTML = '';
-      // create option buttons
       item.options.forEach((opt, idx)=>{
         const btn = document.createElement('button');
         btn.className = 'option';
@@ -219,8 +286,7 @@
         optionsBox.appendChild(btn);
       });
       progressEl.textContent = `Pregunta ${current+1} / ${window._q.length}`;
-      // reset timer
-      timer = 5; timerEl.textContent = timer; accepting = true;
+      timer = 10; timerEl.textContent = timer; accepting = true;
       if(intervalId) clearInterval(intervalId);
       intervalId = setInterval(()=>{
         timer--;
@@ -257,10 +323,9 @@
       accepting = false;
       const optionButtons = Array.from(document.querySelectorAll('.option'));
       optionButtons.forEach((b,i)=>b.disabled = true);
-      // mark correct
       const correctIdx = window._q[current].answer;
       if(optionButtons[correctIdx]) optionButtons[correctIdx].classList.add('correct');
-      showResult(null); // null means time out
+      showResult(null);
       current += 1;
     }
 
@@ -276,7 +341,6 @@
         resultBox.textContent = 'Se acabó el tiempo.';
         resultBox.style.background = 'linear-gradient(90deg, rgba(255,215,130,0.04), rgba(255,255,255,0.01))';
       }
-      // automatically move on after a short pause
       setTimeout(()=>{
         resultBox.classList.add('hidden');
         renderQuestion();
@@ -284,7 +348,6 @@
     }
 
     function showFinal(){
-      // Consider player "lost" if score is less than total questions (user requested a "Perdiste xd" message)
       const lost = score < window._q.length;
       questionText.textContent = lost ? 'Perdiste xd 💜' : '¡Terminaste el Reto!';
       optionsBox.innerHTML = `<div style="padding:12px">Tu puntaje final es <strong>${score} / ${window._q.length}</strong></div>`;
@@ -294,24 +357,20 @@
     }
 
     startBtn.addEventListener('click', ()=>{
-      // if not started or finished, start or restart
       if(startBtn.textContent === 'Comenzar' || startBtn.textContent === 'Volver a jugar'){
         startQuiz();
       } else {
-        // if it's 'Siguiente' and quiz running, skip to next question
         accepting = false; clearInterval(intervalId); current += 1; renderQuestion();
       }
     });
 
     restartBtn.addEventListener('click', ()=>{
       if(intervalId) clearInterval(intervalId);
-      current = 0; score = 0; scoreEl.textContent = score; timerEl.textContent = 5; questionText.textContent = 'Presiona Comenzar para iniciar el Reto'; optionsBox.innerHTML = '';
+      current = 0; score = 0; scoreEl.textContent = score; timerEl.textContent = 10; questionText.textContent = 'Presiona Comenzar para iniciar el Reto'; optionsBox.innerHTML = '';
       startBtn.textContent = 'Comenzar'; resultBox.classList.add('hidden'); progressEl.textContent = `Pregunta 0 / ${questions.length}`;
     });
 
-    // set initial state
     restartBtn.click();
-
   </script>
 </body>
 </html>

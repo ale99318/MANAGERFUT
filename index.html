@@ -19,7 +19,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
         .search-screen {
@@ -29,13 +29,13 @@
         }
 
         .search-title {
-            font-size: 32px;
+            font-size: clamp(24px, 6vw, 32px);
             margin-bottom: 20px;
             font-weight: bold;
         }
 
         .search-subtitle {
-            font-size: 18px;
+            font-size: clamp(16px, 4vw, 18px);
             margin-bottom: 40px;
             opacity: 0.9;
         }
@@ -45,7 +45,7 @@
             color: white;
             border: none;
             padding: 20px 40px;
-            font-size: 20px;
+            font-size: clamp(18px, 4.5vw, 20px);
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
@@ -65,7 +65,7 @@
         }
 
         .loading-text {
-            font-size: 24px;
+            font-size: clamp(20px, 5vw, 24px);
             margin-bottom: 30px;
         }
 
@@ -91,7 +91,7 @@
         }
 
         .flag {
-            font-size: 100px;
+            font-size: clamp(70px, 15vw, 100px);
             margin-bottom: 20px;
             animation: flag-wave 0.6s ease-in-out;
         }
@@ -102,14 +102,14 @@
         }
 
         .match-title {
-            font-size: 28px;
+            font-size: clamp(22px, 5.5vw, 28px);
             font-weight: bold;
             margin-bottom: 15px;
             color: #ffd700;
         }
 
         .match-subtitle {
-            font-size: 20px;
+            font-size: clamp(18px, 4.5vw, 20px);
             margin-bottom: 30px;
         }
 
@@ -126,7 +126,7 @@
             padding: 15px 30px;
             border: none;
             border-radius: 25px;
-            font-size: 18px;
+            font-size: clamp(16px, 4vw, 18px);
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -193,30 +193,27 @@
 
         .letter {
             position: fixed;
-            width: 85vw;
-            max-width: 340px;
-            height: auto;
-            min-height: 400px;
+            width: 90vw;
+            max-width: 380px;
+            max-height: 85vh;
             background: white;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            padding: 30px 20px;
+            padding: 25px 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             border-radius: 5px;
             opacity: 0;
             transition: all 0.6s ease;
             pointer-events: none;
             z-index: 10;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .envelope.open .letter {
             opacity: 1;
             pointer-events: all;
-        }
-        
-        .envelope.open .flap {
-            transform: rotateX(180deg);
         }
         
         .envelope.open .stamp,
@@ -226,8 +223,8 @@
 
         .heart-decoration {
             text-align: center;
-            font-size: 50px;
-            margin-bottom: 20px;
+            font-size: clamp(40px, 10vw, 50px);
+            margin-bottom: 15px;
             animation: heartbeat 1.5s infinite;
         }
 
@@ -237,7 +234,7 @@
         }
 
         .question {
-            font-size: 22px;
+            font-size: clamp(20px, 5vw, 22px);
             text-align: center;
             color: #c44569;
             margin-bottom: 20px;
@@ -250,7 +247,7 @@
             flex-direction: column;
             align-items: center;
             gap: 15px;
-            margin-top: 25px;
+            margin-top: 20px;
         }
 
         .btn {
@@ -259,7 +256,7 @@
             padding: 15px 25px;
             border: none;
             border-radius: 25px;
-            font-size: 18px;
+            font-size: clamp(16px, 4vw, 18px);
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -294,11 +291,18 @@
 
         .message {
             text-align: center;
-            font-size: 16px;
+            font-size: clamp(14px, 3.5vw, 16px);
             line-height: 1.6;
             color: #555;
             margin-top: 15px;
             padding: 0 10px;
+            word-wrap: break-word;
+        }
+
+        .message br {
+            display: block;
+            content: "";
+            margin-top: 8px;
         }
 
         .tap-hint {
@@ -307,7 +311,7 @@
             left: 50%;
             transform: translateX(-50%);
             color: white;
-            font-size: 14px;
+            font-size: clamp(12px, 3vw, 14px);
             animation: pulse 2s infinite;
         }
 
@@ -317,7 +321,7 @@
         }
 
         .final-message {
-            font-size: 18px;
+            font-size: clamp(16px, 4vw, 18px);
             color: #c44569;
             font-weight: bold;
             text-align: center;
@@ -345,7 +349,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 80px;
+            font-size: clamp(60px, 15vw, 80px);
             z-index: 1000;
             animation: celebration-pop 1s ease-out forwards;
             pointer-events: none;
@@ -367,7 +371,7 @@
 
         .emoji-rain {
             position: fixed;
-            font-size: 30px;
+            font-size: clamp(20px, 5vw, 30px);
             animation: emoji-fall 4s linear forwards;
             pointer-events: none;
             z-index: 999;
@@ -396,7 +400,7 @@
 
         @keyframes grow {
             to {
-                font-size: 24px;
+                font-size: clamp(18px, 4.5vw, 24px);
                 padding: 20px 35px;
             }
         }
@@ -407,41 +411,64 @@
 
         @keyframes shrink {
             to {
-                font-size: 12px;
+                font-size: clamp(10px, 2.5vw, 12px);
                 padding: 8px 15px;
             }
         }
 
-        .hidden {
-            display: none;
+        .long-message {
+            text-align: left;
+            padding: 0 5px;
         }
 
-        .show {
-            display: block;
+        .long-message ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 10px 0;
+        }
+
+        .long-message li {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .letter::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .letter::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .letter::-webkit-scrollbar-thumb {
+            background: #c44569;
+            border-radius: 10px;
+        }
+
+        .letter::-webkit-scrollbar-thumb:hover {
+            background: #a03555;
         }
     </style>
 </head>
 <body>
-    <!-- Pantalla de búsqueda inicial -->
     <div class="search-screen" id="searchScreen">
         <div class="search-title">💕 Buscador de Amor 💕</div>
         <div class="search-subtitle">Encuentra a tu persona especial</div>
         <button class="btn-search" id="btnStartSearch">🔍 Buscar Persona</button>
     </div>
 
-    <!-- Pantalla de carga -->
     <div class="loading-container" id="loadingScreen">
         <div class="loading-text">Buscando personas cerca...</div>
         <div class="spinner"></div>
-        <div id="searchingText" style="font-size: 18px; opacity: 0.8;">🌎 Conectando...</div>
+        <div id="searchingText" style="font-size: clamp(16px, 4vw, 18px); opacity: 0.8;">🌎 Conectando...</div>
     </div>
 
-    <!-- Pantalla de match encontrado -->
     <div class="match-found" id="matchScreen">
         <div class="flag">🇵🇪</div>
         <div class="match-title">¡MATCH ENCONTRADO!</div>
         <div class="match-subtitle">Has encontrado el amor en Perú 💕</div>
-        <div style="font-size: 18px; margin-bottom: 25px; line-height: 1.6;">
+        <div style="font-size: clamp(16px, 4vw, 18px); margin-bottom: 25px; line-height: 1.6;">
             Una persona especial está esperando<br>
             ¿Deseas aceptar esta conexión?
         </div>
@@ -451,7 +478,6 @@
         </div>
     </div>
 
-    <!-- Sobre y carta -->
     <div class="envelope" id="envelope">
         <div class="flap"></div>
         <div class="stamp">💌</div>
@@ -494,6 +520,29 @@
             '✨ ¡Casi listo!'
         ];
 
+        function createEmojiRain(emoji, count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const emojiEl = document.createElement('div');
+                    emojiEl.className = 'emoji-rain';
+                    emojiEl.textContent = emoji;
+                    emojiEl.style.left = Math.random() * 100 + 'vw';
+                    emojiEl.style.top = -50 + 'px';
+                    emojiEl.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(emojiEl);
+                    setTimeout(() => emojiEl.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        function showCelebration(emoji) {
+            const cel = document.createElement('div');
+            cel.className = 'celebration';
+            cel.textContent = emoji;
+            document.body.appendChild(cel);
+            setTimeout(() => cel.remove(), 1000);
+        }
+
         btnStartSearch.addEventListener('click', function() {
             searchScreen.style.display = 'none';
             loadingScreen.style.display = 'block';
@@ -535,29 +584,6 @@
             }
         });
 
-        function createEmojiRain(emoji, count) {
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    const emojiEl = document.createElement('div');
-                    emojiEl.className = 'emoji-rain';
-                    emojiEl.textContent = emoji;
-                    emojiEl.style.left = Math.random() * 100 + 'vw';
-                    emojiEl.style.top = -50 + 'px';
-                    emojiEl.style.animationDelay = Math.random() * 0.5 + 's';
-                    document.body.appendChild(emojiEl);
-                    setTimeout(() => emojiEl.remove(), 4000);
-                }, i * 100);
-            }
-        }
-
-        function showCelebration(emoji) {
-            const cel = document.createElement('div');
-            cel.className = 'celebration';
-            cel.textContent = emoji;
-            document.body.appendChild(cel);
-            setTimeout(() => cel.remove(), 1000);
-        }
-
         btnSi.addEventListener('click', function() {
             if (intentosNo === 0) {
                 showCelebration('🎉');
@@ -568,16 +594,39 @@
                 createEmojiRain('✨', 15);
                 
                 heartDeco.textContent = '🥰';
-                heartDeco.style.fontSize = '70px';
+                heartDeco.style.fontSize = 'clamp(60px, 12vw, 70px)';
                 
-                message.innerHTML = '¡YAAAAY! 🎊🎊🎊<br><br><span style="font-size: 24px; color: #ff1493;">¡DIJISTE QUE SÍÍÍÍ!</span><br><br>🎈 ¡Eres una special para mí! 🎈<br><br>💫 En este corto tiempo te encontre virtudez que ya no se ven:<br>✨ eres una persna luz maravillosa xd asi dices xd no encerio tienes amabilidad <br> carisma y talento me gusta como cantas casi me igualas te flata practica  día<br>🌟 eres tierna y me sermoneas aunque yo sea una blanca paloma onocente<br>🎁 eres hermosa <br>🌈 Muy burlona tambien -.- <br><br><span style="font-size: 20px;">¡Gracias por hacerme la persona MÁS FELIZ del mundo! 😍🎉</span>';
+                message.innerHTML = `<div class="long-message">
+                    <div style="font-size: clamp(20px, 5vw, 24px); color: #ff1493; text-align: center; margin-bottom: 15px;">¡YAAAAY! 🎊🎊🎊</div>
+                    <div style="font-size: clamp(20px, 5vw, 24px); color: #ff1493; text-align: center; margin-bottom: 15px;">¡DIJISTE QUE SÍÍÍÍ!</div>
+                    <div style="text-align: center; margin: 15px 0;">🎈 ¡Eres una especial para mí! 🎈</div>
+                    <div style="margin: 15px 0;">💫 En este corto tiempo te encontré virtudes que ya no se ven:</div>
+                    <ul>
+                        <li>✨ Eres una persona luz maravillosa (así dices xd) no en serio, tienes amabilidad, carisma y talento. Me gusta como cantas, casi me igualas, te falta práctica cada día</li>
+                        <li>🌟 Eres tierna y me sermoneas aunque yo sea una blanca paloma inocente</li>
+                        <li>🎁 Eres hermosa</li>
+                        <li>🌈 Muy burlona también -.-</li>
+                    </ul>
+                    <div style="font-size: clamp(18px, 4.5vw, 20px); text-align: center; margin-top: 20px;">¡Gracias por hacerme la persona MÁS FELIZ del mundo! 😍🎉</div>
+                </div>`;
                 
                 buttons.innerHTML = '<button class="btn btn-si" id="btnContinuar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">💕 ¡Quiero más sorpresas! 💕</button>';
                 
                 document.getElementById('btnContinuar').addEventListener('click', function() {
                     showCelebration('🎁');
                     createEmojiRain('🎁', 25);
-                    message.innerHTML = '<div style="font-size: 22px; color: #ff1493; margin-bottom: 20px;">🎁 ¡SORPRESA! 🎁</div>Te tengo preparado:<br><br>🌟 Una cita especial<br>🍕 pprobar comida con el mejor chef osea yo <br>🎬 Películas juntos<br>🎮 Juegos en pareja<br>🌙 Noches de estrellas usted cantara yo le hago porras xd <br> <br><br><span style="font-size: 18px; color: #c44569;">¡Cada día será una nueva aventura! 🚀✨</span>';
+                    message.innerHTML = `<div class="long-message">
+                        <div style="font-size: clamp(20px, 5vw, 22px); color: #ff1493; text-align: center; margin-bottom: 20px;">🎁 ¡SORPRESA! 🎁</div>
+                        <div style="text-align: center; margin-bottom: 15px;">Te tengo preparado:</div>
+                        <ul>
+                            <li>🌟 Una cita especial</li>
+                            <li>🍕 Probar comida con el mejor chef, osea yo</li>
+                            <li>🎬 Películas juntos</li>
+                            <li>🎮 Juegos en pareja</li>
+                            <li>🌙 Noches de estrellas - usted cantará, yo le hago porras xd</li>
+                        </ul>
+                        <div style="font-size: clamp(16px, 4vw, 18px); color: #c44569; text-align: center; margin-top: 20px;">¡Cada día será una nueva aventura! 🚀✨</div>
+                    </div>`;
                     
                     buttons.innerHTML = '<button class="btn btn-si" id="btnFinal" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; animation: pulse-si 1s infinite;">💖 ¡Te amo! 💖</button>';
                     
@@ -586,7 +635,14 @@
                         createEmojiRain('💝', 30);
                         createEmojiRain('💗', 30);
                         heartDeco.textContent = '👫';
-                        message.innerHTML = '<div style="font-size: 28px; color: #ff1493; margin: 20px 0; animation: heartbeat 1.5s infinite;">💕 YO TAMBIÉN TE AMO 💕</div><div style="font-size: 18px; line-height: 1.8;">Eres mi persona favorita,<br>mi mejor amiga,<br>mi la que me escucha borracho,<br>mi TODO 🌟<br><br><span style="font-size: 24px; color: #c44569;">¡alory! 👫💫</span></div>';
+                        message.innerHTML = `<div style="font-size: clamp(24px, 6vw, 28px); color: #ff1493; margin: 20px 0; animation: heartbeat 1.5s infinite; text-align: center;">💕 YO TAMBIÉN TE AMO 💕</div>
+                        <div style="font-size: clamp(16px, 4vw, 18px); line-height: 1.8; text-align: center;">
+                            Eres mi persona favorita,<br>
+                            mi mejor amiga,<br>
+                            la que me escucha borracho,<br>
+                            mi TODO 🌟
+                        </div>
+                        <div style="font-size: clamp(20px, 5vw, 24px); color: #c44569; margin-top: 20px; text-align: center;">¡Alory! 👫💫</div>`;
                         buttons.style.display = 'none';
                     });
                 });
@@ -599,21 +655,10 @@
                 createEmojiRain('🎊', 20);
                 
                 heartDeco.textContent = '👰';
-                heartDeco.style.fontSize = '70px';
-                message.innerHTML = '<div style="font-size: 26px; color: #ff1493; margin-bottom: 15px;">¡LO SABÍA! 💍</div><span class="final-message" style="font-size: 20px;">¡Oficialmente marcaste SÍ!<br><br>🎉 Ahora eres mi esposa oficialmente 💑<br><br>📋 Tu agenda de esposa:<br>✅ Luna de miel en París 🗼<br>✅ Desayunos en la cama 🥞<br>✅ Bailes en la sala 💃<br>✅ Películas de terror juntos 👻<br>✅ Viajes sorpresa ✈️<br><br><span style="font-size: 24px;">¡Te amo infinitamente! 💕✨</span></span>';
-                
-                buttons.innerHTML = '<button class="btn btn-si" id="btnEsposa" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; font-size: 20px;">👰 ¡Acepto ser tu esposa! 💍</button>';
-                
-                document.getElementById('btnEsposa').addEventListener('click', function() {
-                    showCelebration('🎊');
-                    createEmojiRain('💒', 30);
-                    createEmojiRain('🎉', 30);
-                    heartDeco.textContent = '💑';
-                    message.innerHTML = '<div style="font-size: 30px; margin: 20px 0; animation: heartbeat 1.5s infinite;">🎊 ¡FELICIDADES! 🎊</div><div style="font-size: 20px; line-height: 2;">Has desbloqueado:<br><br>🏆 Nivel: ESPOSA<br>💎 Beneficio: Amor eterno<br>⭐ Bonus: Felicidad infinita<br>🎁 Premio: Mi corazón completo<br><br><span style="font-size: 24px; color: #ff1493;">¡Bienvenida a nuestra historia! 📖💕</span></div>';
-                    buttons.style.display = 'none';
-                });
+                message.innerHTML = `¡JA! ¡Muy tarde! 😂<br><br><span class="final-message">El sistema registró tu respuesta como SÍ ✅<br><br>¡Ahora eres mi esposa oficialmente! 👰💍<br><br>No hay vuelta atrás 💑<br><br>¡Bienvenida a nuestra historia de amor! 💕✨</span>`;
                 
                 question.style.display = 'none';
+                buttons.style.display = 'none';
             }
             question.style.display = 'none';
         });
@@ -644,7 +689,7 @@
                 createEmojiRain('💐', 20);
                 
                 heartDeco.textContent = '👰';
-                message.innerHTML = '¡JA! ¡Muy tarde! 😂<br><br><span class="final-message">El sistema registró tu respuesta como SÍ ✅<br><br>¡Ahora eres mi esposa oficialmente! 👰💍<br><br>No hay vuelta atrás 💑<br><br>¡Bienvenida a nuestra historia de amor! 💕✨</span>';
+                message.innerHTML = `¡JA! ¡Muy tarde! 😂<br><br><span class="final-message">El sistema registró tu respuesta como SÍ ✅<br><br>¡Ahora eres mi esposa oficialmente! 👰💍<br><br>No hay vuelta atrás 💑<br><br>¡Bienvenida a nuestra historia de amor! 💕✨</span>`;
                 
                 question.style.display = 'none';
                 buttons.style.display = 'none';

@@ -65,7 +65,7 @@
         }
 
         .letter {
-            position: absolute;
+            position: fixed;
             width: 85vw;
             max-width: 340px;
             height: auto;
@@ -85,8 +85,16 @@
 
         .envelope.open .letter {
             opacity: 1;
-            transform: translate(-50%, -120%);
             pointer-events: all;
+        }
+        
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+        }
+        
+        .envelope.open .stamp,
+        .envelope.open .tap-hint {
+            opacity: 0;
         }
 
         .heart-decoration {
@@ -403,7 +411,7 @@
                 createEmojiRain('💐', 20);
                 
                 heartDeco.textContent = '👰';
-                message.innerHTML = '¡JA! ¡Muy tarde! 😂<br><br><span class="final-message">El sistema registró tu respuesta como SÍ ✅<br><br>¡Ahora eres mi esposa oficialmente Cory ! 👰💍<br><br>No hay vuelta atrás 💑<br><br>¡Bienvenida a nuestra historia de amor! 💕✨</span>';
+                message.innerHTML = '¡JA! ¡Muy tarde! 😂<br><br><span class="final-message">El sistema registró tu respuesta como SÍ ✅<br><br>¡Ahora eres mi esposa oficialmente! 👰💍<br><br>No hay vuelta atrás 💑<br><br>¡Bienvenida a nuestra historia de amor! 💕✨</span>';
                 
                 question.style.display = 'none';
                 buttons.style.display = 'none';

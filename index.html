@@ -1,472 +1,414 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
-  <title>Reto MORADO ARMY — Quiz BTS (10 seg)</title>
-  <style>
-    :root{
-      --bg1:#4b0082;
-      --bg2:#7b1fa2;
-      --accent:#d1b3ff;
-      --card:#2a004d;
-      --glass: rgba(255,255,255,0.06);
-      --text:#f6f1ff;
-      --correct-border:#c77dff;
-      --wrong-border:#ff5f98;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:var(--text);
-      background: linear-gradient(135deg,var(--bg1) 0%, var(--bg2) 60%);
-      min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
-    .container{width:980px;max-width:980px;margin:auto}
-    header{display:flex;align-items:center;gap:16px;margin-bottom:14px}
-    .logo{background:var(--glass);padding:10px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.2)}
-    h1{margin:0;font-size:24px;letter-spacing:0.6px}
-    p.lead{margin:4px 0 0;color:var(--accent);font-size:14px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una Pregunta Especial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-      border-radius:14px;padding:16px;box-shadow:0 10px 30px rgba(10,0,30,0.35)}
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
 
-    .welcome{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-    .welcome .text{max-width:70%}
-    .welcome h2{margin:0;font-size:18px}
-    .welcome p{margin:6px 0 0;color:var(--accent);font-size:14px}
+        .envelope {
+            position: relative;
+            width: 90vw;
+            max-width: 400px;
+            height: 250px;
+            background: #f4e4d7;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
 
-    .quiz-area{display:grid;grid-template-columns:1fr 240px;gap:14px}
-    .question{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02)}
-    .question h3{margin:0 0 8px;font-size:18px}
-    .options{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-    button.option{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:10px;text-align:left;cursor:pointer;font-size:16px;color:var(--text);transition:all 0.2s}
-    button.option:hover{transform:translateY(-2px)}
-    button.option.correct{border-color:var(--correct-border);background:linear-gradient(90deg, rgba(199,125,255,0.25), rgba(199,125,255,0.12));}
-    button.option.wrong{border-color:var(--wrong-border);background:linear-gradient(90deg, rgba(255,95,152,0.25), rgba(255,95,152,0.12));}
-    button.option:disabled{opacity:0.9;cursor:not-allowed}
+        .envelope:hover {
+            transform: translateY(-5px);
+        }
 
-    .sidebar{padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
-    .timer{font-size:48px;font-weight:800;text-align:center}
-    .meta{margin-top:12px;text-align:center}
-    .meta p{margin:6px 0}
-    .controls{display:flex;gap:8px;justify-content:center;margin-top:12px}
-    .btn{background:var(--accent);color:#2b0140;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700;transition:all 0.2s}
-    .btn:hover{transform:scale(1.05)}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
+        .flap {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 45vw solid transparent;
+            border-right: 45vw solid transparent;
+            border-top: 125px solid #e8d4c1;
+            max-width: 400px;
+            top: 0;
+            left: 0;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 3;
+        }
+        
+        @media (min-width: 500px) {
+            .flap {
+                border-left: 200px solid transparent;
+                border-right: 200px solid transparent;
+                border-top: 140px solid #e8d4c1;
+            }
+        }
 
-    .result{margin-top:14px;padding:10px;border-radius:10px;text-align:center}
-    .hidden{display:none}
+        .envelope.open .flap {
+            transform: rotateX(180deg);
+        }
 
-    .rank-badge{display:inline-block;padding:6px 14px;border-radius:20px;font-weight:700;font-size:14px;margin:8px 0;
-      background:linear-gradient(135deg, #c77dff, #9d4edd);box-shadow:0 4px 12px rgba(199,125,255,0.3)}
+        .letter {
+            position: absolute;
+            width: 85vw;
+            max-width: 340px;
+            height: auto;
+            min-height: 400px;
+            background: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 30px 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            opacity: 0;
+            transition: all 0.6s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
 
-    .rank-table{margin-top:16px;padding:12px;background:rgba(255,255,255,0.02);border-radius:10px}
-    .rank-row{display:flex;justify-content:space-between;padding:10px;margin:6px 0;border-radius:8px;background:rgba(255,255,255,0.03)}
-    .rank-row.achieved{background:linear-gradient(90deg, rgba(199,125,255,0.15), rgba(199,125,255,0.05));border-left:3px solid var(--correct-border)}
-    .rank-row.locked{opacity:0.5}
-    .rank-name{font-weight:600;display:flex;align-items:center;gap:8px}
-    .rank-requirement{color:var(--accent);font-size:14px}
+        .envelope.open .letter {
+            opacity: 1;
+            transform: translate(-50%, -120%);
+            pointer-events: all;
+        }
 
-    .progress-bar{width:100%;height:8px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;margin-top:8px}
-    .progress-fill{height:100%;background:linear-gradient(90deg, #c77dff, #9d4edd);transition:width 0.5s ease;border-radius:10px}
+        .heart-decoration {
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s infinite;
+        }
 
-    .final-stats{text-align:center;padding:16px}
-    .final-stats h2{margin:0 0 8px;font-size:28px}
-    .final-stats .score-display{font-size:48px;font-weight:800;color:var(--accent);margin:12px 0}
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+        }
 
-    footer{margin-top:12px;text-align:center;color:rgba(255,255,255,0.6);font-size:13px}
+        .question {
+            font-size: 22px;
+            text-align: center;
+            color: #c44569;
+            margin-bottom: 20px;
+            font-weight: bold;
+            line-height: 1.4;
+        }
 
-    @media (max-width:600px){
-      .container{max-width:100%;padding:8px}
-      header{flex-direction:column;gap:8px;text-align:center}
-      .logo{width:100%}
-      .quiz-area{grid-template-columns:1fr}
-      .welcome{flex-direction:column;text-align:center}
-      .welcome .text{max-width:100%}
-      .sidebar{order:-1;margin-bottom:12px}
-      .question{order:1}
-      button.option{font-size:18px;padding:16px;border-radius:12px}
-      .timer{font-size:56px}
-      h1{font-size:22px}
-      p.lead{font-size:15px}
-      .rank-row{flex-direction:column;gap:4px}
-      .final-stats .score-display{font-size:36px}
-    }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
 
-    @media (pointer:coarse){
-      button.option{padding:18px;font-size:19px;min-height:64px}
-      .btn{padding:12px 16px;font-size:16px}
-    }
+        .btn {
+            width: 100%;
+            max-width: 200px;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            touch-action: manipulation;
+        }
 
-    @keyframes celebrate{
-      0%,100%{transform:scale(1)}
-      50%{transform:scale(1.1)}
-    }
-    .celebrating{animation:celebrate 0.5s ease}
-  </style>
+        .btn-si {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            animation: pulse-si 2s infinite;
+        }
+
+        @keyframes pulse-si {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .btn-si:active {
+            transform: scale(0.95);
+        }
+
+        .btn-no {
+            background: #e0e0e0;
+            color: #666;
+            position: relative;
+        }
+
+        .btn-no:active {
+            transform: scale(0.95);
+        }
+
+        .message {
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+            margin-top: 15px;
+            padding: 0 10px;
+        }
+
+        .tap-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .final-message {
+            font-size: 18px;
+            color: #c44569;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .stamp {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border: 3px solid #c44569;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            background: white;
+            transform: rotate(15deg);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80px;
+            z-index: 1000;
+            animation: celebration-pop 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes celebration-pop {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .emoji-rain {
+            position: fixed;
+            font-size: 30px;
+            animation: emoji-fall 4s linear forwards;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        @keyframes emoji-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .growing {
+            animation: grow 0.5s forwards;
+        }
+
+        @keyframes grow {
+            to {
+                font-size: 24px;
+                padding: 20px 35px;
+            }
+        }
+
+        .shrinking {
+            animation: shrink 0.5s forwards;
+        }
+
+        @keyframes shrink {
+            to {
+                font-size: 12px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="logo">
-        <strong style="font-size:16px">Reto MORADO ARMY</strong>
-        <div style="font-size:12px;color:var(--accent)">Quiz BTS — 10 segundos por pregunta</div>
-      </div>
-      <div>
-        <h1>Reto MORADO ARMY</h1>
-        <p class="lead">Pon a prueba tus conocimientos de BTS. ¡Responde rápido!</p>
-      </div>
-    </header>
-
-    <div class="card">
-      <div class="welcome">
-        <div class="text">
-          <h2>¡Bienvenido! 💜</h2>
-          <p>Prepárate para el <strong>Reto MORADO ARMY</strong>. Tienes 10 segundos para elegir la opción correcta en cada pregunta. ¡Suerte!</p>
-        </div>
-        <div>
-          <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='110'><rect rx='18' width='100%' height='100%' fill='%23ffffff' opacity='0.02'/><text x='50%' y='55%' font-size='22' font-family='Arial' fill='%23f6f1ff' text-anchor='middle'>💜</text></svg>" alt="morado" style="width:88px;height:88px;border-radius:12px;" />
-        </div>
-      </div>
-
-      <div class="quiz-area">
-        <div>
-          <div class="question">
-            <h3 id="questionText">Pregunta</h3>
-            <div class="options" id="options"></div>
-          </div>
-
-          <div class="result hidden" id="resultBox"></div>
-        </div>
-
-        <aside class="sidebar">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div>
-              <div style="font-size:12px;opacity:0.8">Tiempo</div>
-              <div class="timer" id="timer">10</div>
+    <div class="envelope" id="envelope">
+        <div class="flap"></div>
+        <div class="stamp">💌</div>
+        
+        <div class="letter" id="letter">
+            <div class="heart-decoration" id="heartDeco">💝</div>
+            <div class="question" id="question">¿Quieres ser mi amor?</div>
+            <div class="message" id="message"></div>
+            <div class="buttons" id="buttons">
+                <button class="btn btn-si" id="btnSi">SÍ 💕</button>
+                <button class="btn btn-no" id="btnNo">No</button>
             </div>
-            <div style="text-align:right">
-              <div style="font-size:12px;opacity:0.8">Puntos</div>
-              <div style="font-size:22px;font-weight:700" id="score">0</div>
-            </div>
-          </div>
-
-          <div class="meta">
-            <p id="progress">Pregunta 0 / 0</p>
-            <div class="controls">
-              <button class="btn" id="startBtn">Comenzar</button>
-              <button class="btn ghost" id="restartBtn">Reiniciar</button>
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <footer>
-        Juego creado para fans de BTS — responde antes de que se acabe el tiempo. 💜
-      </footer>
+        </div>
+        
+        <div class="tap-hint">Toca el sobre para abrir 💌</div>
     </div>
-  </div>
 
-  <script>
-    const questions = [
-      {
-        q: '¿Cuál es el nombre del fandom oficial de BTS?',
-        options: ['BLINK', 'ARMY', 'ONCE', 'MOA'],
-        answer: 1
-      },
-      {
-        q: '¿Cuál es el nombre real de RM?',
-        options: ['Kim Namjoon', 'Min Yoongi', 'Jung Hoseok', 'Park Jimin'],
-        answer: 0
-      },
-      {
-        q: '¿En qué año debutó BTS?',
-        options: ['2011', '2012', '2013', '2014'],
-        answer: 2
-      },
-      {
-        q: '¿Cuál es el nombre real de Suga?',
-        options: ['Jung Hoseok', 'Min Yoongi', 'Kim Taehyung', 'Jeon Jungkook'],
-        answer: 1
-      },
-      {
-        q: '¿Qué significa BTS en coreano?',
-        options: ['Bangtan Sonyeondan', 'Beyond The Scene', 'Boys To Success', 'Born To Shine'],
-        answer: 0
-      },
-      {
-        q: '¿Quién es el miembro más joven de BTS?',
-        options: ['Jimin', 'V', 'Jungkook', 'Jin'],
-        answer: 2
-      },
-      {
-        q: '¿Cuál fue la primera canción de BTS en alcanzar #1 en Billboard Hot 100?',
-        options: ['Dynamite', 'Butter', 'Boy With Luv', 'Life Goes On'],
-        answer: 0
-      },
-      {
-        q: '¿Qué miembro popularizó la frase "I purple you"?',
-        options: ['RM', 'Jin', 'V', 'Jimin'],
-        answer: 2
-      },
-      {
-        q: '¿Cuál es el nombre real de J-Hope?',
-        options: ['Park Jimin', 'Kim Seokjin', 'Jung Hoseok', 'Kim Taehyung'],
-        answer: 2
-      },
-      {
-        q: '¿En qué ciudad nació Jimin?',
-        options: ['Seúl', 'Busan', 'Daegu', 'Gwangju'],
-        answer: 1
-      },
-      {
-        q: '¿Cuál es el nombre de la compañía discográfica de BTS?',
-        options: ['YG Entertainment', 'SM Entertainment', 'Big Hit Entertainment', 'JYP Entertainment'],
-        answer: 2
-      },
-      {
-        q: '¿Qué miembro tiene el apodo "Golden Maknae"?',
-        options: ['Jimin', 'V', 'Jin', 'Jungkook'],
-        answer: 3
-      },
-      {
-        q: '¿Cuál álbum incluye la canción "Spring Day"?',
-        options: ['Wings', 'You Never Walk Alone', 'Love Yourself: Her', 'Map of the Soul: 7'],
-        answer: 1
-      },
-      {
-        q: '¿Qué miembro es conocido por su amor a los animales y tiene una perrita llamada Yeontan?',
-        options: ['Jin', 'Suga', 'V', 'Jimin'],
-        answer: 2
-      },
-      {
-        q: '¿Cuántos miembros tiene BTS?',
-        options: ['5', '6', '7', '8'],
-        answer: 2
-      },
-      {
-        q: '¿Qué canción de BTS tiene un MV con más de 1 billón de vistas en YouTube?',
-        options: ['DNA', 'Boy With Luv', 'Dynamite', 'Fake Love'],
-        answer: 1
-      },
-      {
-        q: '¿Cuál es el nombre real de Jin?',
-        options: ['Kim Seokjin', 'Kim Namjoon', 'Kim Taehyung', 'Park Jimin'],
-        answer: 0
-      },
-      {
-        q: '¿Qué miembro es el líder de BTS?',
-        options: ['Jin', 'Suga', 'RM', 'J-Hope'],
-        answer: 2
-      },
-      {
-        q: '¿En qué año BTS presentó en los Grammy Awards por primera vez?',
-        options: ['2018', '2019', '2020', '2021'],
-        answer: 2
-      },
-      {
-        q: '¿Cuál es el nombre del reality show de BTS?',
-        options: ['Run BTS', 'BTS In The House', 'Bangtan Bomb', 'BTS World'],
-        answer: 0
-      }
-    ];
+    <script>
+        let intentosNo = 0;
+        const envelope = document.getElementById('envelope');
+        const btnSi = document.getElementById('btnSi');
+        const btnNo = document.getElementById('btnNo');
+        const message = document.getElementById('message');
+        const question = document.getElementById('question');
+        const buttons = document.getElementById('buttons');
+        const heartDeco = document.getElementById('heartDeco');
 
-    const ranks = [
-      { name: 'Baby ARMY', emoji: '💜', required: 5 },
-      { name: 'ARMY', emoji: '⭐', required: 10 },
-      { name: 'Super ARMY', emoji: '🌟', required: 15 },
-      { name: 'Mega ARMY Suprema', emoji: '👑', required: 20 }
-    ];
+        envelope.addEventListener('click', function(e) {
+            if (!this.classList.contains('open')) {
+                this.classList.add('open');
+            }
+        });
 
-    let current = 0;
-    let score = 0;
-    let timer = 10;
-    let intervalId = null;
-    let accepting = false;
-
-    const questionText = document.getElementById('questionText');
-    const optionsBox = document.getElementById('options');
-    const timerEl = document.getElementById('timer');
-    const scoreEl = document.getElementById('score');
-    const progressEl = document.getElementById('progress');
-    const startBtn = document.getElementById('startBtn');
-    const restartBtn = document.getElementById('restartBtn');
-    const resultBox = document.getElementById('resultBox');
-
-    function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-
-    function getRank(score){
-      for(let i = ranks.length - 1; i >= 0; i--){
-        if(score >= ranks[i].required){
-          return ranks[i];
+        function createEmojiRain(emoji, count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const emojiEl = document.createElement('div');
+                    emojiEl.className = 'emoji-rain';
+                    emojiEl.textContent = emoji;
+                    emojiEl.style.left = Math.random() * 100 + 'vw';
+                    emojiEl.style.top = -50 + 'px';
+                    emojiEl.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(emojiEl);
+                    setTimeout(() => emojiEl.remove(), 4000);
+                }, i * 100);
+            }
         }
-      }
-      return null;
-    }
 
-    function getNextRank(score){
-      for(let i = 0; i < ranks.length; i++){
-        if(score < ranks[i].required){
-          return ranks[i];
+        function showCelebration(emoji) {
+            const cel = document.createElement('div');
+            cel.className = 'celebration';
+            cel.textContent = emoji;
+            document.body.appendChild(cel);
+            setTimeout(() => cel.remove(), 1000);
         }
-      }
-      return null;
-    }
 
-    function startQuiz(){
-      current = 0; score = 0; scoreEl.textContent = score; resultBox.classList.add('hidden');
-      window._q = shuffle(questions.slice());
-      startBtn.textContent = 'Siguiente';
-      renderQuestion();
-    }
+        btnSi.addEventListener('click', function() {
+            if (intentosNo === 0) {
+                // Primera vez que dice SÍ
+                showCelebration('🎉');
+                createEmojiRain('❤️', 15);
+                createEmojiRain('💕', 15);
+                createEmojiRain('💖', 15);
+                
+                heartDeco.textContent = '🥰';
+                message.innerHTML = '¡YAAAAY! 🎊<br><br>¡Sabía que dirías que sí! 💕<br><br>Eres la persona más especial para mí.<br><br>Prepárate para muchos abrazos, besos y momentos increíbles juntos! 🌹✨<br><br>¡Gracias por hacerme la persona más feliz del mundo! 😍';
+            } else {
+                // Cuando finalmente dice SÍ después de intentar decir NO
+                showCelebration('💍');
+                createEmojiRain('👰', 20);
+                createEmojiRain('💒', 20);
+                createEmojiRain('💐', 20);
+                
+                heartDeco.textContent = '👰';
+                message.innerHTML = '¡LO SABÍA! 💍<br><br><span class="final-message">¡Oficialmente marcaste SÍ!<br><br>Ahora eres mi esposa oficialmente 💑<br><br>Ya estoy planeando nuestra luna de miel 🏝️<br><br>Te amo infinitamente 💕✨</span>';
+            }
+            question.style.display = 'none';
+            buttons.style.display = 'none';
+        });
 
-    function renderQuestion(){
-      if(!window._q || current >= window._q.length){
-        showFinal();
-        return;
-      }
-      const item = window._q[current];
-      questionText.textContent = item.q;
-      optionsBox.innerHTML = '';
-      item.options.forEach((opt, idx)=>{
-        const btn = document.createElement('button');
-        btn.className = 'option';
-        btn.textContent = opt;
-        btn.disabled = false;
-        btn.addEventListener('click', ()=> selectOption(idx, btn));
-        optionsBox.appendChild(btn);
-      });
-      progressEl.textContent = `Pregunta ${current+1} / ${window._q.length}`;
-      timer = 10; timerEl.textContent = timer; accepting = true;
-      if(intervalId) clearInterval(intervalId);
-      intervalId = setInterval(()=>{
-        timer--;
-        timerEl.textContent = timer;
-        if(timer <= 0){
-          clearInterval(intervalId);
-          timeUp();
-        }
-      },1000);
-    }
-
-    function selectOption(selectedIdx, btnEl){
-      if(!accepting) return;
-      accepting = false;
-      clearInterval(intervalId);
-      const correctIdx = window._q[current].answer;
-      const optionButtons = Array.from(document.querySelectorAll('.option'));
-      optionButtons.forEach((b,i)=>b.disabled = true);
-
-      if(selectedIdx === correctIdx){
-        btnEl.classList.add('correct');
-        score += 1;
-        scoreEl.textContent = score;
-        scoreEl.classList.add('celebrating');
-        setTimeout(()=>scoreEl.classList.remove('celebrating'), 500);
-        showResult(true);
-      } else {
-        btnEl.classList.add('wrong');
-        if(optionButtons[correctIdx]) optionButtons[correctIdx].classList.add('correct');
-        showResult(false);
-      }
-      current += 1;
-    }
-
-    function timeUp(){
-      accepting = false;
-      const optionButtons = Array.from(document.querySelectorAll('.option'));
-      optionButtons.forEach((b,i)=>b.disabled = true);
-      const correctIdx = window._q[current].answer;
-      if(optionButtons[correctIdx]) optionButtons[correctIdx].classList.add('correct');
-      showResult(null);
-      current += 1;
-    }
-
-    function showResult(ok){
-      resultBox.classList.remove('hidden');
-      if(ok === true){
-        resultBox.textContent = '¡Correcto! +1 punto';
-        resultBox.style.background = 'linear-gradient(90deg, rgba(124,255,178,0.06), rgba(255,255,255,0.01))';
-      } else if(ok === false){
-        resultBox.textContent = 'Respuesta incorrecta.';
-        resultBox.style.background = 'linear-gradient(90deg, rgba(255,139,139,0.04), rgba(255,255,255,0.01))';
-      } else {
-        resultBox.textContent = 'Se acabó el tiempo.';
-        resultBox.style.background = 'linear-gradient(90deg, rgba(255,215,130,0.04), rgba(255,255,255,0.01))';
-      }
-      setTimeout(()=>{
-        resultBox.classList.add('hidden');
-        renderQuestion();
-      },900);
-    }
-
-    function showFinal(){
-      const currentRank = getRank(score);
-      const nextRank = getNextRank(score);
-      
-      let rankHTML = '';
-      if(currentRank){
-        rankHTML = `<div class="rank-badge">${currentRank.emoji} ${currentRank.name}</div>`;
-      } else {
-        rankHTML = `<div style="color:var(--accent);margin:8px 0">¡Sigue intentando! 💜</div>`;
-      }
-
-      let nextRankHTML = '';
-      if(nextRank){
-        const pointsNeeded = nextRank.required - score;
-        nextRankHTML = `<p style="color:var(--accent);margin-top:8px">Te faltaron ${pointsNeeded} respuesta${pointsNeeded>1?'s':''} correcta${pointsNeeded>1?'s':''} para llegar a <strong>${nextRank.name}</strong> ${nextRank.emoji}</p>`;
-      } else {
-        nextRankHTML = `<p style="color:#ffd700;margin-top:8px;font-weight:700">¡Felicidades! Alcanzaste el rango máximo 👑</p>`;
-      }
-
-      const progressPercent = (score / window._q.length) * 100;
-
-      let rankTableHTML = '<div class="rank-table"><h3 style="margin:0 0 12px;text-align:center">Tabla de Rangos</h3>';
-      ranks.forEach(rank => {
-        const achieved = score >= rank.required;
-        const rowClass = achieved ? 'rank-row achieved' : 'rank-row locked';
-        const checkmark = achieved ? '✓' : '🔒';
-        rankTableHTML += `
-          <div class="${rowClass}">
-            <div class="rank-name">${checkmark} ${rank.emoji} ${rank.name}</div>
-            <div class="rank-requirement">${rank.required} correctas</div>
-          </div>
-        `;
-      });
-      rankTableHTML += '</div>';
-
-      questionText.innerHTML = `
-        <div class="final-stats">
-          <h2>¡Completaste el Reto!</h2>
-          <div class="score-display">${score} / ${window._q.length}</div>
-          ${rankHTML}
-          <div class="progress-bar">
-            <div class="progress-fill" style="width:${progressPercent}%"></div>
-          </div>
-          ${nextRankHTML}
-        </div>
-      `;
-      
-      optionsBox.innerHTML = rankTableHTML;
-      progressEl.textContent = `Pregunta ${window._q.length} / ${window._q.length}`;
-      timerEl.textContent = '-';
-      startBtn.textContent = 'Volver a jugar';
-    }
-
-    startBtn.addEventListener('click', ()=>{
-      if(startBtn.textContent === 'Comenzar' || startBtn.textContent === 'Volver a jugar'){
-        startQuiz();
-      } else {
-        accepting = false; clearInterval(intervalId); current += 1; renderQuestion();
-      }
-    });
-
-    restartBtn.addEventListener('click', ()=>{
-      if(intervalId) clearInterval(intervalId);
-      current = 0; score = 0; scoreEl.textContent = score; timerEl.textContent = 10; questionText.textContent = 'Presiona Comenzar para iniciar el Reto'; optionsBox.innerHTML = '';
-      startBtn.textContent = 'Comenzar'; resultBox.classList.add('hidden'); progressEl.textContent = `Pregunta 0 / ${questions.length}`;
-    });
-
-    restartBtn.click();
-  </script>
+        btnNo.addEventListener('click', function(e) {
+            e.preventDefault();
+            intentosNo++;
+            
+            if (intentosNo === 1) {
+                // Primera vez que dice NO
+                btnNo.classList.add('shake');
+                setTimeout(() => btnNo.classList.remove('shake'), 500);
+                
+                heartDeco.textContent = '😢';
+                message.innerHTML = '¡Auch! Eso dolió... 💔<br><br>Pero sé que te equivocaste 😊<br><br>El botón correcto es el de arriba ☝️<br><br>¡Inténtalo de nuevo! 😉';
+                
+                btnSi.classList.add('growing');
+                btnNo.classList.add('shrinking');
+                
+                setTimeout(() => {
+                    btnSi.classList.remove('growing');
+                    btnNo.classList.remove('shrinking');
+                }, 500);
+                
+            } else if (intentosNo === 2) {
+                // Segunda vez que dice NO - SE REGISTRA COMO SÍ
+                showCelebration('💍');
+                createEmojiRain('👰', 20);
+                createEmojiRain('💒', 20);
+                createEmojiRain('💐', 20);
+                
+                heartDeco.textContent = '👰';
+                message.innerHTML = '¡JA! ¡Muy tarde! 😂<br><br><span class="final-message">El sistema registró tu respuesta como SÍ ✅<br><br>¡Ahora eres mi esposa oficialmente Cory ! 👰💍<br><br>No hay vuelta atrás 💑<br><br>¡Bienvenida a nuestra historia de amor! 💕✨</span>';
+                
+                question.style.display = 'none';
+                buttons.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

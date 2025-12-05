@@ -22,6 +22,132 @@
             overflow: hidden;
         }
 
+        .search-screen {
+            text-align: center;
+            color: white;
+            max-width: 400px;
+        }
+
+        .search-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .search-subtitle {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .btn-search:active {
+            transform: scale(0.95);
+        }
+
+        .loading-container {
+            display: none;
+            text-align: center;
+            color: white;
+        }
+
+        .loading-text {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255,255,255,0.3);
+            border-top: 6px solid white;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .match-found {
+            display: none;
+            text-align: center;
+            color: white;
+            max-width: 400px;
+        }
+
+        .flag {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: flag-wave 0.6s ease-in-out;
+        }
+
+        @keyframes flag-wave {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .match-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .match-subtitle {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .match-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-match {
+            width: 100%;
+            max-width: 250px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .btn-accept {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-reject {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-match:active {
+            transform: scale(0.95);
+        }
+
         .envelope {
             position: relative;
             width: 90vw;
@@ -31,6 +157,7 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             cursor: pointer;
             transition: transform 0.3s ease;
+            display: none;
         }
 
         .envelope:hover {
@@ -213,22 +340,6 @@
             transform: rotate(15deg);
         }
 
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #f0f;
-            position: absolute;
-            animation: confetti-fall 3s linear forwards;
-        }
-
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
         .celebration {
             position: fixed;
             top: 50%;
@@ -300,9 +411,47 @@
                 padding: 8px 15px;
             }
         }
+
+        .hidden {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
     </style>
 </head>
 <body>
+    <!-- Pantalla de búsqueda inicial -->
+    <div class="search-screen" id="searchScreen">
+        <div class="search-title">💕 Buscador de Amor 💕</div>
+        <div class="search-subtitle">Encuentra a tu persona especial</div>
+        <button class="btn-search" id="btnStartSearch">🔍 Buscar Persona</button>
+    </div>
+
+    <!-- Pantalla de carga -->
+    <div class="loading-container" id="loadingScreen">
+        <div class="loading-text">Buscando personas cerca...</div>
+        <div class="spinner"></div>
+        <div id="searchingText" style="font-size: 18px; opacity: 0.8;">🌎 Conectando...</div>
+    </div>
+
+    <!-- Pantalla de match encontrado -->
+    <div class="match-found" id="matchScreen">
+        <div class="flag">🇵🇪</div>
+        <div class="match-title">¡MATCH ENCONTRADO!</div>
+        <div class="match-subtitle">Has encontrado el amor en Perú 💕</div>
+        <div style="font-size: 18px; margin-bottom: 25px; line-height: 1.6;">
+            Una persona especial está esperando<br>
+            ¿Deseas aceptar esta conexión?
+        </div>
+        <div class="match-buttons">
+            <button class="btn-match btn-accept" id="btnAcceptMatch">💖 Sí, acepto</button>
+            <button class="btn-match btn-reject" id="btnRejectMatch">❌ No, gracias</button>
+        </div>
+    </div>
+
+    <!-- Sobre y carta -->
     <div class="envelope" id="envelope">
         <div class="flap"></div>
         <div class="stamp">💌</div>
@@ -322,13 +471,63 @@
 
     <script>
         let intentosNo = 0;
+        const searchScreen = document.getElementById('searchScreen');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const matchScreen = document.getElementById('matchScreen');
         const envelope = document.getElementById('envelope');
+        const btnStartSearch = document.getElementById('btnStartSearch');
+        const btnAcceptMatch = document.getElementById('btnAcceptMatch');
+        const btnRejectMatch = document.getElementById('btnRejectMatch');
         const btnSi = document.getElementById('btnSi');
         const btnNo = document.getElementById('btnNo');
         const message = document.getElementById('message');
         const question = document.getElementById('question');
         const buttons = document.getElementById('buttons');
         const heartDeco = document.getElementById('heartDeco');
+        const searchingText = document.getElementById('searchingText');
+
+        const searchTexts = [
+            '🌎 Conectando...',
+            '🔍 Buscando en Perú y Mexico...',
+            '💫 Analizando compatibilidad...',
+            '❤️ Encontrando tu alma gemela...',
+            '✨ ¡Casi listo!'
+        ];
+
+        btnStartSearch.addEventListener('click', function() {
+            searchScreen.style.display = 'none';
+            loadingScreen.style.display = 'block';
+            
+            let textIndex = 0;
+            const textInterval = setInterval(() => {
+                textIndex = (textIndex + 1) % searchTexts.length;
+                searchingText.textContent = searchTexts[textIndex];
+            }, 800);
+
+            setTimeout(() => {
+                clearInterval(textInterval);
+                loadingScreen.style.display = 'none';
+                matchScreen.style.display = 'block';
+                createEmojiRain('🇵🇪', 15);
+                createEmojiRain('💕', 15);
+            }, 4000);
+        });
+
+        btnAcceptMatch.addEventListener('click', function() {
+            showCelebration('💝');
+            createEmojiRain('❤️', 20);
+            createEmojiRain('✨', 20);
+            
+            setTimeout(() => {
+                matchScreen.style.display = 'none';
+                envelope.style.display = 'block';
+            }, 1500);
+        });
+
+        btnRejectMatch.addEventListener('click', function() {
+            matchScreen.style.display = 'none';
+            envelope.style.display = 'block';
+        });
 
         envelope.addEventListener('click', function(e) {
             if (!this.classList.contains('open')) {
@@ -361,26 +560,62 @@
 
         btnSi.addEventListener('click', function() {
             if (intentosNo === 0) {
-                // Primera vez que dice SÍ
                 showCelebration('🎉');
-                createEmojiRain('❤️', 15);
-                createEmojiRain('💕', 15);
+                createEmojiRain('❤️', 20);
+                createEmojiRain('💕', 20);
                 createEmojiRain('💖', 15);
+                createEmojiRain('🌹', 15);
+                createEmojiRain('✨', 15);
                 
                 heartDeco.textContent = '🥰';
-                message.innerHTML = '¡YAAAAY! 🎊<br><br>¡Sabía que dirías que sí! 💕<br><br>Eres la persona más especial para mí.<br><br>Prepárate para muchos abrazos, besos y momentos increíbles juntos! 🌹✨<br><br>¡Gracias por hacerme la persona más feliz del mundo! 😍';
+                heartDeco.style.fontSize = '70px';
+                
+                message.innerHTML = '¡YAAAAY! 🎊🎊🎊<br><br><span style="font-size: 24px; color: #ff1493;">¡DIJISTE QUE SÍÍÍÍ!</span><br><br>🎈 ¡Eres una special para mí! 🎈<br><br>💫 En este corto tiempo te encontre virtudez que ya no se ven:<br>✨ eres una persna luz maravillosa xd asi dices xd no encerio tienes amabilidad <br> carisma y talento me gusta como cantas casi me igualas te flata practica  día<br>🌟 eres tierna y me sermoneas aunque yo sea una blanca paloma onocente<br>🎁 eres hermosa <br>🌈 Muy burlona tambien -.- <br><br><span style="font-size: 20px;">¡Gracias por hacerme la persona MÁS FELIZ del mundo! 😍🎉</span>';
+                
+                buttons.innerHTML = '<button class="btn btn-si" id="btnContinuar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">💕 ¡Quiero más sorpresas! 💕</button>';
+                
+                document.getElementById('btnContinuar').addEventListener('click', function() {
+                    showCelebration('🎁');
+                    createEmojiRain('🎁', 25);
+                    message.innerHTML = '<div style="font-size: 22px; color: #ff1493; margin-bottom: 20px;">🎁 ¡SORPRESA! 🎁</div>Te tengo preparado:<br><br>🌟 Una cita especial<br>🍕 pprobar comida con el mejor chef osea yo <br>🎬 Películas juntos<br>🎮 Juegos en pareja<br>🌙 Noches de estrellas usted cantara yo le hago porras xd <br> <br><br><span style="font-size: 18px; color: #c44569;">¡Cada día será una nueva aventura! 🚀✨</span>';
+                    
+                    buttons.innerHTML = '<button class="btn btn-si" id="btnFinal" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; animation: pulse-si 1s infinite;">💖 ¡Te amo! 💖</button>';
+                    
+                    document.getElementById('btnFinal').addEventListener('click', function() {
+                        showCelebration('💑');
+                        createEmojiRain('💝', 30);
+                        createEmojiRain('💗', 30);
+                        heartDeco.textContent = '👫';
+                        message.innerHTML = '<div style="font-size: 28px; color: #ff1493; margin: 20px 0; animation: heartbeat 1.5s infinite;">💕 YO TAMBIÉN TE AMO 💕</div><div style="font-size: 18px; line-height: 1.8;">Eres mi persona favorita,<br>mi mejor amiga,<br>mi la que me escucha borracho,<br>mi TODO 🌟<br><br><span style="font-size: 24px; color: #c44569;">¡alory! 👫💫</span></div>';
+                        buttons.style.display = 'none';
+                    });
+                });
+                
             } else {
-                // Cuando finalmente dice SÍ después de intentar decir NO
                 showCelebration('💍');
-                createEmojiRain('👰', 20);
-                createEmojiRain('💒', 20);
-                createEmojiRain('💐', 20);
+                createEmojiRain('👰', 25);
+                createEmojiRain('💒', 25);
+                createEmojiRain('💐', 25);
+                createEmojiRain('🎊', 20);
                 
                 heartDeco.textContent = '👰';
-                message.innerHTML = '¡LO SABÍA! 💍<br><br><span class="final-message">¡Oficialmente marcaste SÍ!<br><br>Ahora eres mi esposa oficialmente 💑<br><br>Ya estoy planeando nuestra luna de miel 🏝️<br><br>Te amo infinitamente 💕✨</span>';
+                heartDeco.style.fontSize = '70px';
+                message.innerHTML = '<div style="font-size: 26px; color: #ff1493; margin-bottom: 15px;">¡LO SABÍA! 💍</div><span class="final-message" style="font-size: 20px;">¡Oficialmente marcaste SÍ!<br><br>🎉 Ahora eres mi esposa oficialmente 💑<br><br>📋 Tu agenda de esposa:<br>✅ Luna de miel en París 🗼<br>✅ Desayunos en la cama 🥞<br>✅ Bailes en la sala 💃<br>✅ Películas de terror juntos 👻<br>✅ Viajes sorpresa ✈️<br><br><span style="font-size: 24px;">¡Te amo infinitamente! 💕✨</span></span>';
+                
+                buttons.innerHTML = '<button class="btn btn-si" id="btnEsposa" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; font-size: 20px;">👰 ¡Acepto ser tu esposa! 💍</button>';
+                
+                document.getElementById('btnEsposa').addEventListener('click', function() {
+                    showCelebration('🎊');
+                    createEmojiRain('💒', 30);
+                    createEmojiRain('🎉', 30);
+                    heartDeco.textContent = '💑';
+                    message.innerHTML = '<div style="font-size: 30px; margin: 20px 0; animation: heartbeat 1.5s infinite;">🎊 ¡FELICIDADES! 🎊</div><div style="font-size: 20px; line-height: 2;">Has desbloqueado:<br><br>🏆 Nivel: ESPOSA<br>💎 Beneficio: Amor eterno<br>⭐ Bonus: Felicidad infinita<br>🎁 Premio: Mi corazón completo<br><br><span style="font-size: 24px; color: #ff1493;">¡Bienvenida a nuestra historia! 📖💕</span></div>';
+                    buttons.style.display = 'none';
+                });
+                
+                question.style.display = 'none';
             }
             question.style.display = 'none';
-            buttons.style.display = 'none';
         });
 
         btnNo.addEventListener('click', function(e) {
@@ -388,7 +623,6 @@
             intentosNo++;
             
             if (intentosNo === 1) {
-                // Primera vez que dice NO
                 btnNo.classList.add('shake');
                 setTimeout(() => btnNo.classList.remove('shake'), 500);
                 
@@ -404,7 +638,6 @@
                 }, 500);
                 
             } else if (intentosNo === 2) {
-                // Segunda vez que dice NO - SE REGISTRA COMO SÍ
                 showCelebration('💍');
                 createEmojiRain('👰', 20);
                 createEmojiRain('💒', 20);

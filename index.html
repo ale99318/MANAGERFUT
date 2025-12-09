@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Una Pregunta Especial</title>
+    <title>Escáner de Huella Digital</title>
     <style>
         * {
             margin: 0;
@@ -12,687 +12,445 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
             padding: 20px;
-            overflow-x: hidden;
         }
 
-        .search-screen {
-            text-align: center;
-            color: white;
-            max-width: 400px;
-        }
-
-        .search-title {
-            font-size: clamp(24px, 6vw, 32px);
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .search-subtitle {
-            font-size: clamp(16px, 4vw, 18px);
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-
-        .btn-search {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border: none;
-            padding: 20px 40px;
-            font-size: clamp(18px, 4.5vw, 20px);
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-        }
-
-        .btn-search:active {
-            transform: scale(0.95);
-        }
-
-        .loading-container {
-            display: none;
-            text-align: center;
-            color: white;
-        }
-
-        .loading-text {
-            font-size: clamp(20px, 5vw, 24px);
-            margin-bottom: 30px;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid rgba(255,255,255,0.3);
-            border-top: 6px solid white;
-            border-radius: 50%;
-            margin: 0 auto 30px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-
-        .match-found {
-            display: none;
-            text-align: center;
-            color: white;
-            max-width: 400px;
-        }
-
-        .flag {
-            font-size: clamp(70px, 15vw, 100px);
-            margin-bottom: 20px;
-            animation: flag-wave 0.6s ease-in-out;
-        }
-
-        @keyframes flag-wave {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        .match-title {
-            font-size: clamp(22px, 5.5vw, 28px);
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #ffd700;
-        }
-
-        .match-subtitle {
-            font-size: clamp(18px, 4.5vw, 20px);
-            margin-bottom: 30px;
-        }
-
-        .match-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .btn-match {
+        .container {
             width: 100%;
-            max-width: 250px;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: clamp(16px, 4vw, 18px);
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-        }
-
-        .btn-accept {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
-        }
-
-        .btn-reject {
-            background: #e0e0e0;
-            color: #666;
-        }
-
-        .btn-match:active {
-            transform: scale(0.95);
-        }
-
-        .envelope {
-            position: relative;
-            width: 90vw;
             max-width: 400px;
-            height: 250px;
-            background: #f4e4d7;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            display: none;
         }
 
-        .envelope:hover {
-            transform: translateY(-5px);
-        }
-
-        .flap {
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 45vw solid transparent;
-            border-right: 45vw solid transparent;
-            border-top: 125px solid #e8d4c1;
-            max-width: 400px;
-            top: 0;
-            left: 0;
-            transform-origin: top;
-            transition: transform 0.6s ease;
-            z-index: 3;
-        }
-        
-        @media (min-width: 500px) {
-            .flap {
-                border-left: 200px solid transparent;
-                border-right: 200px solid transparent;
-                border-top: 140px solid #e8d4c1;
-            }
-        }
-
-        .envelope.open .flap {
-            transform: rotateX(180deg);
-        }
-
-        .letter {
-            position: fixed;
-            width: 90vw;
-            max-width: 380px;
-            max-height: 85vh;
+        .scanner-container {
             background: white;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 25px 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            border-radius: 5px;
-            opacity: 0;
-            transition: all 0.6s ease;
-            pointer-events: none;
-            z-index: 10;
-            overflow-y: auto;
-            overflow-x: hidden;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
         }
 
-        .envelope.open .letter {
-            opacity: 1;
-            pointer-events: all;
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
         }
-        
-        .envelope.open .stamp,
-        .envelope.open .tap-hint {
-            opacity: 0;
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .fingerprint-area {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fingerprint-area:hover {
+            transform: scale(1.05);
+        }
+
+        .fingerprint-icon {
+            font-size: 80px;
+            color: white;
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.8);
+            top: 0;
+            display: none;
+            animation: scan 2s ease-in-out;
+        }
+
+        @keyframes scan {
+            0%, 100% { top: 0; }
+            50% { top: 100%; }
+        }
+
+        .scanning .scan-line {
+            display: block;
+        }
+
+        .status-text {
+            color: #666;
+            font-size: 16px;
+            margin-top: 20px;
+            min-height: 24px;
+        }
+
+        .scanning-text {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .contract-container {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .contract-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .contract-header h2 {
+            color: #667eea;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .contract-header .date {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .contract-body {
+            color: #333;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .contract-body p {
+            margin-bottom: 15px;
+        }
+
+        .bride-name {
+            color: #764ba2;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .requirements {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .requirements h3 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .requirement-item::before {
+            content: "💕";
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .signature-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #ddd;
+            text-align: center;
+        }
+
+        .signature-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .fingerprint-stamp {
+            font-size: 40px;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .signature-text {
+            color: #764ba2;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .verified-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
         }
 
         .heart-decoration {
-            text-align: center;
-            font-size: clamp(40px, 10vw, 50px);
-            margin-bottom: 15px;
+            font-size: 30px;
             animation: heartbeat 1.5s infinite;
         }
 
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.2); }
+            50% { transform: scale(1.1); }
         }
 
-        .question {
-            font-size: clamp(20px, 5vw, 22px);
-            text-align: center;
-            color: #c44569;
-            margin-bottom: 20px;
-            font-weight: bold;
-            line-height: 1.4;
-        }
-
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .btn {
+        .cancel-button {
             width: 100%;
-            max-width: 200px;
-            padding: 15px 25px;
+            padding: 15px;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            color: white;
             border: none;
-            border-radius: 25px;
-            font-size: clamp(16px, 4vw, 18px);
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            touch-action: manipulation;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.3);
         }
 
-        .btn-si {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            animation: pulse-si 2s infinite;
-        }
-
-        @keyframes pulse-si {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .btn-si:active {
+        .cancel-button:active {
             transform: scale(0.95);
         }
 
-        .btn-no {
-            background: #e0e0e0;
-            color: #666;
-            position: relative;
-        }
-
-        .btn-no:active {
-            transform: scale(0.95);
-        }
-
-        .message {
-            text-align: center;
-            font-size: clamp(14px, 3.5vw, 16px);
-            line-height: 1.6;
-            color: #555;
-            margin-top: 15px;
-            padding: 0 10px;
-            word-wrap: break-word;
-        }
-
-        .message br {
-            display: block;
-            content: "";
-            margin-top: 8px;
-        }
-
-        .tap-hint {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: clamp(12px, 3vw, 14px);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        .final-message {
-            font-size: clamp(16px, 4vw, 18px);
-            color: #c44569;
-            font-weight: bold;
-            text-align: center;
-            line-height: 1.8;
-        }
-
-        .stamp {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border: 3px solid #c44569;
-            border-radius: 5px;
-            display: flex;
+        .cancel-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
+            animation: fadeIn 0.3s;
+        }
+
+        .cancel-message.show {
+            display: flex;
+        }
+
+        .message-content {
             background: white;
-            transform: rotate(15deg);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 90%;
+            animation: bounceIn 0.5s;
         }
 
-        .celebration {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: clamp(60px, 15vw, 80px);
-            z-index: 1000;
-            animation: celebration-pop 1s ease-out forwards;
-            pointer-events: none;
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        @keyframes celebration-pop {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 1;
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.2);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0;
-            }
+        .message-content h3 {
+            color: #ff6b6b;
+            font-size: 24px;
+            margin-bottom: 15px;
         }
 
-        .emoji-rain {
-            position: fixed;
-            font-size: clamp(20px, 5vw, 30px);
-            animation: emoji-fall 4s linear forwards;
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        @keyframes emoji-fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .shake {
-            animation: shake 0.5s;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .growing {
-            animation: grow 0.5s forwards;
-        }
-
-        @keyframes grow {
-            to {
-                font-size: clamp(18px, 4.5vw, 24px);
-                padding: 20px 35px;
-            }
-        }
-
-        .shrinking {
-            animation: shrink 0.5s forwards;
-        }
-
-        @keyframes shrink {
-            to {
-                font-size: clamp(10px, 2.5vw, 12px);
-                padding: 8px 15px;
-            }
-        }
-
-        .long-message {
-            text-align: left;
-            padding: 0 5px;
-        }
-
-        .long-message ul {
-            list-style: none;
-            padding-left: 0;
-            margin: 10px 0;
-        }
-
-        .long-message li {
-            margin: 8px 0;
-            line-height: 1.5;
-        }
-
-        .letter::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .letter::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .letter::-webkit-scrollbar-thumb {
-            background: #c44569;
-            border-radius: 10px;
-        }
-
-        .letter::-webkit-scrollbar-thumb:hover {
-            background: #a03555;
+        .message-content p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="search-screen" id="searchScreen">
-        <div class="search-title">💕 Buscador de Amor 💕</div>
-        <div class="search-subtitle">Encuentra a tu persona especial</div>
-        <button class="btn-search" id="btnStartSearch">🔍 Buscar Persona</button>
-    </div>
-
-    <div class="loading-container" id="loadingScreen">
-        <div class="loading-text">Buscando personas cerca...</div>
-        <div class="spinner"></div>
-        <div id="searchingText" style="font-size: clamp(16px, 4vw, 18px); opacity: 0.8;">🌎 Conectando...</div>
-    </div>
-
-    <div class="match-found" id="matchScreen">
-        <div class="flag">🇵🇪</div>
-        <div class="match-title">¡MATCH ENCONTRADO!</div>
-        <div class="match-subtitle">Has encontrado el amor en Perú 💕</div>
-        <div style="font-size: clamp(16px, 4vw, 18px); margin-bottom: 25px; line-height: 1.6;">
-            Una persona especial está esperando<br>
-            ¿Deseas aceptar esta conexión?
+    <div class="container">
+        <div class="scanner-container" id="scanner">
+            <h1>Sistema de Autenticación</h1>
+            <p class="subtitle">Por favor, coloca tu huella digital</p>
+            
+            <div class="fingerprint-area" id="fingerprint" onclick="startScan()">
+                <div class="fingerprint-icon">👆</div>
+                <div class="scan-line"></div>
+            </div>
+            
+            <p class="status-text" id="statusText">Toca el sensor para escanear</p>
         </div>
-        <div class="match-buttons">
-            <button class="btn-match btn-accept" id="btnAcceptMatch">💖 Sí, acepto</button>
-            <button class="btn-match btn-reject" id="btnRejectMatch">❌ No, gracias</button>
-        </div>
-    </div>
 
-    <div class="envelope" id="envelope">
-        <div class="flap"></div>
-        <div class="stamp">💌</div>
-        
-        <div class="letter" id="letter">
-            <div class="heart-decoration" id="heartDeco">💝</div>
-            <div class="question" id="question">¿Quieres ser mi amor?</div>
-            <div class="message" id="message"></div>
-            <div class="buttons" id="buttons">
-                <button class="btn btn-si" id="btnSi">SÍ 💕</button>
-                <button class="btn btn-no" id="btnNo">No</button>
+        <div class="contract-container" id="contract">
+            <div class="contract-header">
+                <h2>📜 CONTRATO MATRIMONIAL 📜</h2>
+                <p class="date" id="currentDate"></p>
+                <div class="heart-decoration">❤️</div>
+            </div>
+
+            <div class="contract-body">
+                <p>Por medio del presente documento, yo <span class="bride-name">CORINA</span>, identificada mediante huella digital verificada, acepto voluntariamente y con mucho amor los siguientes términos y condiciones:</p>
+
+                <div class="requirements">
+                    <h3>✨ CLÁUSULAS DEL AMOR ✨</h3>
+                    
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 1:</strong> Me comprometo a dar besitos cada vez que me los pidas, sin importar la hora o el lugar.</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 2:</strong> Prometo darte abrazos apretados cuando estés triste o cuando simplemente quieras sentirte querido.</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 3:</strong> Acepto ser tu cómplice en todas las aventuras, desde las más pequeñas hasta las más grandes.</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 4:</strong> Me comprometo a cocinar tus platillos favoritos y a compartir contigo hasta el último bocado.</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 5:</strong> Prometo reírme de tus chistes, incluso de los más malos, porque tu sonrisa lo vale todo.</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 6:</strong> Acepto ver películas románticas contigo y no quejarme (mucho) cuando llores.</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 7:</strong> Me comprometo a decirte "te amo" todos los días y a demostrártelo con acciones.</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 8:</strong> Prometo estar a tu lado en las buenas, en las malas, y en todas las que vengan.</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 9:</strong> Te dejaré ir a juergear y tomar con tus amigos, porque confío en ti y sé que siempre volverás a casa. 🍺</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 10:</strong> Me comprometo a cuidarte cuando tengas malestares, prepararte caldito caliente y mimarte hasta que te sientas mejor. 🍲</span>
+                    </div>
+
+                    <div class="requirement-item">
+                        <span><strong>ARTÍCULO 11:</strong> Acepto darte pecho cuando tú lo desees, sin preguntas ni condiciones. 😏💕</span>
+                    </div>
+                </div>
+
+                <p style="text-align: center; font-style: italic; color: #666; margin-top: 20px;">
+                    Este contrato es válido desde ahora y hasta que el universo deje de existir. 💫
+                </p>
+
+                <button class="cancel-button" id="cancelBtn">
+                    ❌ Anular Contrato
+                </button>
+
+                <div class="cancel-message" id="cancelMessage">
+                    <div class="message-content">
+                        <div style="font-size: 50px; margin-bottom: 10px;">🔒</div>
+                        <h3>¡ACCESO DENEGADO!</h3>
+                        <p>Usted es MÍA y NO puede anular este contrato.</p>
+                        <p style="font-size: 12px; color: #999; margin-top: 10px;">Contrato permanente e irrevocable 💕</p>
+                    </div>
+                </div>
+
+                <div class="signature-section">
+                    <p style="color: #999; font-size: 13px;">Firmado digitalmente mediante huella biométrica:</p>
+                    <div class="signature-box">
+                        <div class="fingerprint-stamp">🔒</div>
+                        <p class="signature-text">Corina</p>
+                        <p style="font-size: 12px; color: #999;">Huella Digital Verificada</p>
+                        <span class="verified-badge">✓ AUTENTICADO</span>
+                    </div>
+                </div>
             </div>
         </div>
-        
-        <div class="tap-hint">Toca el sobre para abrir 💌</div>
     </div>
 
     <script>
-        let intentosNo = 0;
-        const searchScreen = document.getElementById('searchScreen');
-        const loadingScreen = document.getElementById('loadingScreen');
-        const matchScreen = document.getElementById('matchScreen');
-        const envelope = document.getElementById('envelope');
-        const btnStartSearch = document.getElementById('btnStartSearch');
-        const btnAcceptMatch = document.getElementById('btnAcceptMatch');
-        const btnRejectMatch = document.getElementById('btnRejectMatch');
-        const btnSi = document.getElementById('btnSi');
-        const btnNo = document.getElementById('btnNo');
-        const message = document.getElementById('message');
-        const question = document.getElementById('question');
-        const buttons = document.getElementById('buttons');
-        const heartDeco = document.getElementById('heartDeco');
-        const searchingText = document.getElementById('searchingText');
-
-        const searchTexts = [
-            '🌎 Conectando...',
-            '🔍 Buscando en Perú y Mexico...',
-            '💫 Analizando compatibilidad...',
-            '❤️ Encontrando tu alma gemela...',
-            '✨ ¡Casi listo!'
-        ];
-
-        function createEmojiRain(emoji, count) {
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    const emojiEl = document.createElement('div');
-                    emojiEl.className = 'emoji-rain';
-                    emojiEl.textContent = emoji;
-                    emojiEl.style.left = Math.random() * 100 + 'vw';
-                    emojiEl.style.top = -50 + 'px';
-                    emojiEl.style.animationDelay = Math.random() * 0.5 + 's';
-                    document.body.appendChild(emojiEl);
-                    setTimeout(() => emojiEl.remove(), 4000);
-                }, i * 100);
-            }
-        }
-
-        function showCelebration(emoji) {
-            const cel = document.createElement('div');
-            cel.className = 'celebration';
-            cel.textContent = emoji;
-            document.body.appendChild(cel);
-            setTimeout(() => cel.remove(), 1000);
-        }
-
-        btnStartSearch.addEventListener('click', function() {
-            searchScreen.style.display = 'none';
-            loadingScreen.style.display = 'block';
+        function startScan() {
+            const fingerprint = document.getElementById('fingerprint');
+            const statusText = document.getElementById('statusText');
+            const scanner = document.getElementById('scanner');
+            const contract = document.getElementById('contract');
             
-            let textIndex = 0;
-            const textInterval = setInterval(() => {
-                textIndex = (textIndex + 1) % searchTexts.length;
-                searchingText.textContent = searchTexts[textIndex];
-            }, 800);
-
-            setTimeout(() => {
-                clearInterval(textInterval);
-                loadingScreen.style.display = 'none';
-                matchScreen.style.display = 'block';
-                createEmojiRain('🇵🇪', 15);
-                createEmojiRain('💕', 15);
-            }, 4000);
-        });
-
-        btnAcceptMatch.addEventListener('click', function() {
-            showCelebration('💝');
-            createEmojiRain('❤️', 20);
-            createEmojiRain('✨', 20);
+            fingerprint.classList.add('scanning');
+            statusText.innerHTML = '<span class="scanning-text">⚡ Escaneando huella...</span>';
             
             setTimeout(() => {
-                matchScreen.style.display = 'none';
-                envelope.style.display = 'block';
-            }, 1500);
-        });
+                statusText.innerHTML = '<span class="scanning-text">✓ Analizando patrón biométrico...</span>';
+            }, 1000);
 
-        btnRejectMatch.addEventListener('click', function() {
-            matchScreen.style.display = 'none';
-            envelope.style.display = 'block';
-        });
+            setTimeout(() => {
+                statusText.innerHTML = '<span style="color: #4CAF50; font-weight: bold;">✓ Identidad verificada: CORINA</span>';
+            }, 2000);
 
-        envelope.addEventListener('click', function(e) {
-            if (!this.classList.contains('open')) {
-                this.classList.add('open');
-            }
-        });
-
-        btnSi.addEventListener('click', function() {
-            if (intentosNo === 0) {
-                showCelebration('🎉');
-                createEmojiRain('❤️', 20);
-                createEmojiRain('💕', 20);
-                createEmojiRain('💖', 15);
-                createEmojiRain('🌹', 15);
-                createEmojiRain('✨', 15);
+            setTimeout(() => {
+                scanner.style.display = 'none';
+                contract.style.display = 'block';
                 
-                heartDeco.textContent = '🥰';
-                heartDeco.style.fontSize = 'clamp(60px, 12vw, 70px)';
-                
-                message.innerHTML = `<div class="long-message">
-                    <div style="font-size: clamp(20px, 5vw, 24px); color: #ff1493; text-align: center; margin-bottom: 15px;">¡YAAAAY! 🎊🎊🎊</div>
-                    <div style="font-size: clamp(20px, 5vw, 24px); color: #ff1493; text-align: center; margin-bottom: 15px;">¡DIJISTE QUE SÍÍÍÍ!</div>
-                    <div style="text-align: center; margin: 15px 0;">🎈 ¡Eres una especial para mí! 🎈</div>
-                    <div style="margin: 15px 0;">💫 En este corto tiempo te encontré virtudes que ya no se ven:</div>
-                    <ul>
-                        <li>✨ Eres una persona luz maravillosa (así dices xd) no en serio, tienes amabilidad, carisma y talento. Me gusta como cantas, casi me igualas, te falta práctica cada día</li>
-                        <li>🌟 Eres tierna y me sermoneas aunque yo sea una blanca paloma inocente</li>
-                        <li>🎁 Eres hermosa</li>
-                        <li>🌈 Muy burlona también -.-</li>
-                    </ul>
-                    <div style="font-size: clamp(18px, 4.5vw, 20px); text-align: center; margin-top: 20px;">¡Gracias por hacerme la persona MÁS FELIZ del mundo! 😍🎉</div>
-                </div>`;
-                
-                buttons.innerHTML = '<button class="btn btn-si" id="btnContinuar" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">💕 ¡Quiero más sorpresas! 💕</button>';
-                
-                document.getElementById('btnContinuar').addEventListener('click', function() {
-                    showCelebration('🎁');
-                    createEmojiRain('🎁', 25);
-                    message.innerHTML = `<div class="long-message">
-                        <div style="font-size: clamp(20px, 5vw, 22px); color: #ff1493; text-align: center; margin-bottom: 20px;">🎁 ¡SORPRESA! 🎁</div>
-                        <div style="text-align: center; margin-bottom: 15px;">Te tengo preparado:</div>
-                        <ul>
-                            <li>🌟 Una cita especial</li>
-                            <li>🍕 Probar comida con el mejor chef, osea yo</li>
-                            <li>🎬 Películas juntos</li>
-                            <li>🎮 Juegos en pareja</li>
-                            <li>🌙 Noches de estrellas - usted cantará, yo le hago porras xd</li>
-                        </ul>
-                        <div style="font-size: clamp(16px, 4vw, 18px); color: #c44569; text-align: center; margin-top: 20px;">¡Cada día será una nueva aventura! 🚀✨</div>
-                    </div>`;
-                    
-                    buttons.innerHTML = '<button class="btn btn-si" id="btnFinal" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; animation: pulse-si 1s infinite;">💖 ¡Te amo! 💖</button>';
-                    
-                    document.getElementById('btnFinal').addEventListener('click', function() {
-                        showCelebration('💑');
-                        createEmojiRain('💝', 30);
-                        createEmojiRain('💗', 30);
-                        heartDeco.textContent = '👫';
-                        message.innerHTML = `<div style="font-size: clamp(24px, 6vw, 28px); color: #ff1493; margin: 20px 0; animation: heartbeat 1.5s infinite; text-align: center;">💕 YO TAMBIÉN TE AMO 💕</div>
-                        <div style="font-size: clamp(16px, 4vw, 18px); line-height: 1.8; text-align: center;">
-                            Eres mi persona favorita,<br>
-                            mi mejor amiga,<br>
-                            la que me escucha borracho,<br>
-                            mi TODO 🌟
-                        </div>
-                        <div style="font-size: clamp(20px, 5vw, 24px); color: #c44569; margin-top: 20px; text-align: center;">¡Alory! 👫💫</div>`;
-                        buttons.style.display = 'none';
-                    });
+                const today = new Date();
+                const dateStr = today.toLocaleDateString('es-ES', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
                 });
-                
-            } else {
-                showCelebration('💍');
-                createEmojiRain('👰', 25);
-                createEmojiRain('💒', 25);
-                createEmojiRain('💐', 25);
-                createEmojiRain('🎊', 20);
-                
-                heartDeco.textContent = '👰';
-                message.innerHTML = `¡JA! ¡Muy tarde! 😂<br><br><span class="final-message">El sistema registró tu respuesta como SÍ ✅<br><br>¡Ahora eres mi esposa oficialmente! 👰💍<br><br>No hay vuelta atrás 💑<br><br>¡Bienvenida a nuestra historia de amor! 💕✨</span>`;
-                
-                question.style.display = 'none';
-                buttons.style.display = 'none';
+                document.getElementById('currentDate').textContent = dateStr;
+            }, 3000);
+        }
+
+        function tryCancel() {
+            const cancelMessage = document.getElementById('cancelMessage');
+            cancelMessage.classList.add('show');
+            
+            // Vibrar el teléfono si está disponible
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]);
             }
-            question.style.display = 'none';
+            
+            setTimeout(() => {
+                cancelMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        // Agregar event listener al botón
+        document.addEventListener('DOMContentLoaded', function() {
+            const cancelBtn = document.getElementById('cancelBtn');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', tryCancel);
+            }
         });
 
-        btnNo.addEventListener('click', function(e) {
-            e.preventDefault();
-            intentosNo++;
-            
-            if (intentosNo === 1) {
-                btnNo.classList.add('shake');
-                setTimeout(() => btnNo.classList.remove('shake'), 500);
-                
-                heartDeco.textContent = '😢';
-                message.innerHTML = '¡Auch! Eso dolió... 💔<br><br>Pero sé que te equivocaste 😊<br><br>El botón correcto es el de arriba ☝️<br><br>¡Inténtalo de nuevo! 😉';
-                
-                btnSi.classList.add('growing');
-                btnNo.classList.add('shrinking');
-                
-                setTimeout(() => {
-                    btnSi.classList.remove('growing');
-                    btnNo.classList.remove('shrinking');
-                }, 500);
-                
-            } else if (intentosNo === 2) {
-                showCelebration('💍');
-                createEmojiRain('👰', 20);
-                createEmojiRain('💒', 20);
-                createEmojiRain('💐', 20);
-                
-                heartDeco.textContent = '👰';
-                message.innerHTML = `¡JA! ¡Muy tarde! 😂<br><br><span class="final-message">El sistema registró tu respuesta como SÍ ✅<br><br>¡Ahora eres mi esposa oficialmente! 👰💍<br><br>No hay vuelta atrás 💑<br><br>¡Bienvenida a nuestra historia de amor! 💕✨</span>`;
-                
-                question.style.display = 'none';
-                buttons.style.display = 'none';
+        // Cerrar mensaje al tocar fuera
+        document.addEventListener('click', function(e) {
+            const cancelMessage = document.getElementById('cancelMessage');
+            if (e.target === cancelMessage) {
+                cancelMessage.classList.remove('show');
             }
         });
     </script>
